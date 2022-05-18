@@ -1,16 +1,31 @@
-//import logo from './logo.svg';
+import React from "react";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Routes ,
+    Link,
+    BrowserRouter
+  } from "react-router-dom";
+import routes from './config/routes' 
+
 import './App.scss';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          portfolio
-        </p>
-        
-      </header>
-    </div>
+      <Router>
+          <Routes>
+            {routes.map((route,index) => (
+                  <Route  key={index} 
+                          path={route.path}
+                          element={ <route.layout>
+                                    <route.component/>
+                                    </route.layout>}
+                            />
+            ))}
+          </Routes>
+      </Router>
+
   );
 }
 
