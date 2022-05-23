@@ -1,7 +1,20 @@
 import React from 'react'
-
+import Proyecto from '../components/Proyecto'
 export default function Home() {
   return (
-    <div>Estamos en la Home</div>
+    <>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+     <Proyecto/>
+    </>
   )
 }

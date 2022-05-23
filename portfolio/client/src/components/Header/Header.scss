@@ -1,0 +1,29 @@
+
+
+
+.header{
+    
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    top:0;
+    align-items: center;
+    background-color: rgb(29, 119, 221);
+    
+    
+
+    &-right{
+        display: flex;
+        flex-direction: row;
+    }
+    &-left{
+        display: flex;
+        flex-direction: row;
+    }
+
+}
+

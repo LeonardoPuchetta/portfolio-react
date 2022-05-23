@@ -1,4 +1,7 @@
-import React from 'react'
+import React from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import './LayoutBasic.scss';
 
 export default function LayoutBasic(props) {
 
@@ -6,8 +9,17 @@ export default function LayoutBasic(props) {
 
   return (
      <>
-    <h1>Estamos en LayoutBasic</h1>
-    <div>{children}</div>
+    
+        <Header/>
+    
+        <div className='content'>
+          
+          {children}
+        
+        </div>
+
+        <Footer />
+
     </> 
   )
 }

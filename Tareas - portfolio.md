@@ -6,15 +6,15 @@
 | Creacion de la estructura del cliente | la idea es tomar los datos desde una base|**listo**|
 |Creacion de la estructura del servidor | la idea es tomar los datos desde una base|**listo**|
 |Conexion del server con **mongoDB**|------------------|**listo**|
-|Sistema de rutas|es necesario un sistema de rutas con react-router-dom por ejemplo ? si rrd v6 |pendiente|
-|Paquete de componentes para React|es necesario ?|pendiente|
-|Estructura basica de la pagina |html y css basico , se trabajara con componentes|pendiente|
-|header |header con info de contacto|pendiente|
-|Componentes de proyecto|estructura general|pendiente|
+|Sistema de rutas|es necesario un sistema de rutas con react-router-dom por ejemplo ? si rrd v6 |**listo**|
+|Paquete de componentes para React|material UI **no funcionan los icons!!!**|**listo**|
 |Proyecto a github|como se sube ?|**listo**|
+|Diagramar Layouts |vamos a hacerlo con css grid y flexbox , header y content |pendiente|
+|Resolver Icons del Header|puede ser con **antd**|pendiente|
 |----------------|------------------|pendiente|
-|----------------|------------------|pendiente|
-|Creacion de logos|CSS O PROCREATE?|pendiente|
+|Modelos de info para la base mongoDB|------------------|pendiente|
+|CRUD para el back y APIS para el front|------------------|pendiente|
+|Creacion de logos|CSS O PROCREATE? o usar antd|pendiente|
 |----------------|------------------|pendiente|
 |----------------|------------------|pendiente|
 
@@ -66,6 +66,26 @@ middleware para subir imagenes al servidor(**aun no se si debo usarlo**) .
 
 - falta pagina de error404 que en estos momentos no seria necesaria 
 <a href="https://www.udemy.com/course/web-personal-mern-full-stack-mongodb-express-react-node/learn/lecture/16290086#overview">Ver video</a>
+
+- Asi viene la estructura de nuestro client : 
+
+<img src='./Captura2.JPG'/>
+
+### Libreria de componentes 
+
+- instalamos material UI : **npm install @mui/material @emotion/react @emotion/styled** en el client 
+
+### Diagramar Layouts 
+
+#### Header : 
+
+Diagrama con un header fijo compuesto de dos divs colocados a izquierda y derecha del contenedor principal ,usamos IconButton de material UI (**from '@mui/material'**) y una biblioteca de iconos (**from '@mui/icons-material**)
+
+#### Content :
+
+En este caso nuestro content del LayoutBasic sera la pagina Home (por ahora tenemos una sola pagina)
+
+
 
 
 

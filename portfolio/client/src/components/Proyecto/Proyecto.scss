@@ -1,0 +1,29 @@
+.project{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    border-style:inset;
+    border-color: black;
+    background-color: rgb(217, 255, 127);
+
+    &-title{
+        align-self: flex-start;
+        padding: 10px 0 10px 20px;
+    }
+    &-area{
+        display: flex;
+        flex-direction: row;
+        padding: 20px;
+        column-gap:10px;
+    }
+    
+}
+
+.line{
+    height: 100%;
+    border: 1px dashed currentcolor;
+    //position: absolute;
+    top: 0px;
+    //left: calc(100% + 40px);
+}
