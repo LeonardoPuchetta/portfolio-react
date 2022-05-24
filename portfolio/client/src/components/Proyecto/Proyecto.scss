@@ -1,15 +1,18 @@
+@import './../../scss/variables.scss';
+
+
 .project{
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
-    border-radius: 15px;
+    border-radius: 20px;
     border-style:inset;
-    border-color: black;
-    background-color: rgb(217, 255, 127);
+    border-color: $background-header-footer;
+    background-color: $background-area	;
 
     &-title{
         align-self: flex-start;
-        padding: 10px 0 10px 20px;
+        padding: 10px 0 0 20px;
     }
     &-area{
         display: flex;
@@ -17,13 +20,21 @@
         padding: 20px;
         column-gap:10px;
     }
+    &-skills{
+        border-left: 1px dashed;
+        padding: 0 0 0 10px;
+    }
+    &-description{
+        border-left: 1px dashed;
+        padding: 0 0 0 10px;
+    }
     
 }
 
 .line{
     height: 100%;
     border: 1px dashed currentcolor;
-    //position: absolute;
     top: 0px;
-    //left: calc(100% + 40px);
+    width: 1px;
+    float:left;
 }

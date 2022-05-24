@@ -7,17 +7,25 @@
 |Creacion de la estructura del servidor | la idea es tomar los datos desde una base|**listo**|
 |Conexion del server con **mongoDB**|------------------|**listo**|
 |Sistema de rutas|es necesario un sistema de rutas con react-router-dom por ejemplo ? si rrd v6 |**listo**|
-|Paquete de componentes para React|material UI **no funcionan los icons!!!**|**listo**|
+|Paquete de componentes para React|material UI |**listo**|
 |Proyecto a github|como se sube ?|**listo**|
-|Diagramar Layouts |vamos a hacerlo con css grid y flexbox , header y content |pendiente|
-|Resolver Icons del Header|puede ser con **antd**|pendiente|
+|Diagramar Layouts |vamos a hacerlo con css grid y flexbox , header y content |**listo**|
+|Resolver Icons del Header|puede ser con **antd**|**listo**|
+|Resolver posiciones en el layout-header-footer-content|------------------|**listo**|
 |----------------|------------------|pendiente|
-|Modelos de info para la base mongoDB|------------------|pendiente|
+|Modelos de info para la base mongoDB|------------------|**listo**|
 |CRUD para el back y APIS para el front|------------------|pendiente|
+|Formulario de nuevos proyectos|------------------|**listo**|
+|Validar formulario de nuevos proyectos|------------------|pendiente|
+|CSS de formulario|------------------|pendiente|
+|Agregar clave para ingresar nuevo proyecto|------------------|pendiente|
+|Formulario de update para proyectos ya existentes|------------------|pendiente|
+|Subir archivos .md e incluir opcion en formulario de nuevo proyecto (input tipo file) |------------------|pendiente|
 |Creacion de logos|CSS O PROCREATE? o usar antd|pendiente|
 |----------------|------------------|pendiente|
-|----------------|------------------|pendiente|
-
+|Colores y fuentes |CSS|pendiente|
+|Hacer font-size responsive|------------------|pendiente|
+|Dark-mode button en el header|------------------|pendiente|
 
 ### Creacion de la estructura del cliente
 - Creamos una app de react llamada **client**
@@ -84,6 +92,100 @@ Diagrama con un header fijo compuesto de dos divs colocados a izquierda y derech
 #### Content :
 
 En este caso nuestro content del LayoutBasic sera la pagina Home (por ahora tenemos una sola pagina)
+
+Necesitamos : 
+
+- limitar el area del content : lo hacenos en el scss del layout mediante 
+
+~~~
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    margin: 30px 50px 0px 50px; 
+}
+~~~
+
+con esto tendremos nuestras cajas de proyecto centradas y los margenes adecuados 
+
+#### Footer :
+
+la idea es que el footer se vea al final del scroll en el pie de pagina
+
+ ## Modelos de info para la base mongoDB 
+
+Necesitamos un modelo para el Project a cargar en la base de datos y luego en los componentes Projecto.js 
+~~~
+const ProjectSchema = Schema({
+    title : String,
+    image: String,
+    link : String,
+    skills: [{
+        type: String
+    }],
+    description: String,
+    
+})
+~~~
+### Formulario de nuevos proyectos 
+- Creamos un formulario para ingresar proyectos (en un futuro protegido por login) .
+- El formulario esta compuesto de dos inputs de tipo text para el title y el link del proyecto , un campo de tipo textarea para la descripcion del proyecto , y un conjunto de casillas tipo checkbox con las distintas habilidades implementadas en la realizacion del proyecto .
+
+- Los value de las checkbox se guardan en el arreglo **skills** de nuestro modelo de project
+
+
+### CRUD para el back y APIS para el front
+
+- Creamos el endpoint para crear nuevos proyectos :
+en el controlador(server) de project 
+
+~~~
+function newProject(request,response){
+~~~
+
+- En client -> api -> project :
+
+~~~
+function newProjectApi(){
+~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------
+- Nos falta el campo "**documents**" ya que primero debemos resolver como cargar archivos .md en mongoDB si es que esto es posible. 
+- Nos falta resolver como cargar urls de imagenes en mongoDB para poder manejar adecuadamente el campo '**imagen**',
+usamos **connect-multiparty** para dicha tarea :
+
+~~~
+npm i connect-multiparty
+~~~
+
+- las imagenes iran alojadas en una carpeta uploads en el  server 
+- nos va a faltar agregar un middleware para proteger el endpoint con un login 
 
 
 

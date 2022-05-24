@@ -18,7 +18,7 @@ export default function LayoutBasic(props) {
         
         </div>
 
-        <Footer />
+        <Footer className='footer-layout' />
 
     </> 
   )

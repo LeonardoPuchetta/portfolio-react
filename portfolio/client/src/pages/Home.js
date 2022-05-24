@@ -9,12 +9,7 @@ export default function Home() {
      <Proyecto/>
      <Proyecto/>
      <Proyecto/>
-     <Proyecto/>
-     <Proyecto/>
-     <Proyecto/>
-     <Proyecto/>
-     <Proyecto/>
-     <Proyecto/>
+     
     </>
   )
 }
