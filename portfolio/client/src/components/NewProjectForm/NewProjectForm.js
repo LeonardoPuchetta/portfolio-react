@@ -46,7 +46,7 @@ const register = (event) =>{
     
     //guardar datos en la base 
 
-    const result = newProjectApi(inputs);
+    const resulto = newProjectApi(inputs);
 
     resetForm();
 
@@ -82,16 +82,17 @@ const resetForm = () => {
      
    
        <form className='project-form' name='projectForm' onChange={changeForm} onSubmit={register}>
+
             <label id='title-label' className='label-description' htmlFor='title'>
             <span>Titulo </span></label>
             <input name='title' type='text' placeholder='Nombre del proyecto' 
-            id='title' className='input-form'  value={inputs.title}/>
+            id='title' className='input-form'  value={inputs.title} required/>
         
         
             <label id='link-label' className='label-description' htmlFor='link'>
             <span>Link</span></label>
             <input name='link' type='text' placeholder='Link del proyecto' 
-            id='link'  className='input-form'  value={inputs.link}/>
+            id='link'  className='input-form'  value={inputs.link} required/>
        
 
 
@@ -99,8 +100,7 @@ const resetForm = () => {
             <span>Descripcion</span>
             </label>
             <textarea name='description' className='textarea-form' id='description'
-            value={inputs.description}
-            ></textarea>
+            value={inputs.description} required></textarea>
 
 
 

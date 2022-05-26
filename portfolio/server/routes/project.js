@@ -14,7 +14,7 @@ const md_upload_image = multiparty({uploadDir: './uploads/project-image'});
 const api = express.Router();
 
 api.post('/new-project',ProjectController.newProject);
-api.get('/get-project',ProjectController.getProject);
+api.get('/get-projects',ProjectController.getProjects);
 api.put('/upload-image/:id',[md_upload_image],ProjectController.uploadImage);
 
 module.exports = api;

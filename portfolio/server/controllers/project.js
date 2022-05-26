@@ -40,8 +40,15 @@ function newProject(request,response){
 
  }
 
-function getProject(request,response){
-    console.log('dame un proyecto!!!')
+function getProjects(request,response){
+
+        Project.find().then((projects)=>{
+            if(!projects){
+                response.status(404).send({message:"No se han encontrado proyectos"})
+            } else {
+                response.status(200).send({projects})
+            }
+        })
 }
 
 function uploadImage(request,response){
@@ -55,7 +62,7 @@ function uploadImage(request,response){
 
 module.exports = {
     newProject,
-    getProject,
+    getProjects,
     uploadImage
 
 }

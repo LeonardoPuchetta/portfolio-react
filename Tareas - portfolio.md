@@ -149,6 +149,38 @@ function newProject(request,response){
 function newProjectApi(){
 ~~~
 
+ utilizamos esta funcion en la funcion registerForm del componente NewProjectForm.
+
+- Creamos el endpoint para crear traer proyectos de la base  :
+en el controlador(server) de project 
+
+~~~
+function getProject(request,response){
+~~~
+
+- En client -> api -> project :
+
+~~~
+function getProjectApi(){
+~~~
+
+- esta funcion sera utilizada en un **useEffect** de la Home para traernos de la base la lista de proyectos y renderizar asi los components **Proyecto** con los datos de la lista 
+
+~~~
+const [projectsList,setProjectsList] = useState([]);
+
+useEffect(() => {
+    getProyectsApi().then(response => {
+      setProjectsList(response)
+    })
+}, [])
+
+const arrayProjects = projectsList.projects;
+~~~
+- extraemos el array de proyectos y renderizamos mediante una funcion **.map( )** con los componentes **Proyecto** y los datos de los elementos del array pasados por **props** a dichos componentes.
+
+
+
 
 
 
