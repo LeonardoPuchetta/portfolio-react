@@ -14,15 +14,24 @@
 |Resolver posiciones en el layout-header-footer-content|------------------|**listo**|
 |----------------|------------------|pendiente|
 |Modelos de info para la base mongoDB|------------------|**listo**|
-|CRUD para el back y APIS para el front|------------------|pendiente|
+|Funcionalidad de creacion de nuevos proyectos|Create|**listo**|
 |Formulario de nuevos proyectos|------------------|**listo**|
 |Validar formulario de nuevos proyectos|------------------|pendiente|
 |CSS de formulario|------------------|pendiente|
 |Agregar clave para ingresar nuevo proyecto|------------------|pendiente|
+|Renderizar imagenes de Skills en componentes|------------------|**listo**|
+|Funcionalidad de modificacion de proyectos|Update|pendiente|
+|Funcionalidad de borrado de proyectos|------------------|pendiente|
 |Formulario de update para proyectos ya existentes|------------------|pendiente|
-|Subir archivos .md e incluir opcion en formulario de nuevo proyecto (input tipo file) |------------------|pendiente|
-|Creacion de logos|CSS O PROCREATE? o usar antd|pendiente|
-|----------------|------------------|pendiente|
+|Subir archivos (.md e imagenes) al servidor |------------------|**listo**|
+|Obtener nombre de archivo y path de la base de datos|------------------ |**listo**|
+|Subida de archivos en formulario de nuevo proyecto |-----------------|pendiente|
+|Configurar descarga de archivos mediante vista del server mediante vista o visualizar archivo .md en linea ||pendiente|
+|Vincular archivos subidos con el proyecto  |------------------|pendiente|
+|incluir opcion en formulario de nuevo proyecto (input tipo file)|------------------|pendiente|
+||------------------|
+||------------------|
+||------------------|
 |Colores y fuentes |CSS|pendiente|
 |Hacer font-size responsive|------------------|pendiente|
 |Dark-mode button en el header|------------------|pendiente|
@@ -134,7 +143,7 @@ const ProjectSchema = Schema({
 - Los value de las checkbox se guardan en el arreglo **skills** de nuestro modelo de project
 
 
-### CRUD para el back y APIS para el front
+### Funcionalidad de creacion de nuevos proyectos
 
 - Creamos el endpoint para crear nuevos proyectos :
 en el controlador(server) de project 
@@ -178,46 +187,121 @@ useEffect(() => {
 const arrayProjects = projectsList.projects;
 ~~~
 - extraemos el array de proyectos y renderizamos mediante una funcion **.map( )** con los componentes **Proyecto** y los datos de los elementos del array pasados por **props** a dichos componentes.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-------------------------------------------------------
-- Nos falta el campo "**documents**" ya que primero debemos resolver como cargar archivos .md en mongoDB si es que esto es posible. 
-- Nos falta resolver como cargar urls de imagenes en mongoDB para poder manejar adecuadamente el campo '**imagen**',
-usamos **connect-multiparty** para dicha tarea :
-
-~~~
-npm i connect-multiparty
 ~~~
 
-- las imagenes iran alojadas en una carpeta uploads en el  server 
-- nos va a faltar agregar un middleware para proteger el endpoint con un login 
+### Renderizar imagenes de Skills 
+
+- La idea primaria es que dichas imagenes esten alojadas en el **server/src/uploads/skills-image** en varios formatos, nos valdremos de array **skills** para traer dichas imagenes.  
+
+- Creamos un endpoint para buscar imagenes en dicha carpeta , en el server -> controllers -> project :
+
+function getImageSkill(request,response){
+
+    //recibimos la skill en formato lowerCase
+    const skillName = request.params.skill;
+
+    //completamos url de la imagen 
+    //solo contaremos con imagenes en formato .svg
+    const filePath = "./../uploads/skills-images/" + skillName + ".svg" ;
+
+    //generamos una ruta absoluta
+    const pathImage= path.join(__dirname,filePath);
+    
+    //comprobamos si la imagen existe y en caso que podamos leerla la retornamos 
+    if(fs.existsSync(pathImage)){
+        fs.readFile(pathImage,(err,data)=>{
+            if(err){
+                console.log(err)
+            } else {
+                response.sendFile(path.resolve(pathImage))
+            }
+        })
+    } else {
+        response.status(404).send({message:"Imagen no encontrada"});
+    }
+
+}
+
+
+donde hemos usado **fs** y **path**:
+
+<a href='https://nodejs.org/api/fs.html'>https://nodejs.org/api/fs.html</a>
+
+<a href='https://nodejs.org/api/path.html'>https://nodejs.org/api/path.html</a>
+
+**Esta por verse si este direccionamiento absoluto funciona al subir el server por ejemplo a Heroku**
+
+- Creamos el componente **Skill** para renderizar las skill de cada proyecto 
+- 
+
+~~~
+
+### Renderizar imagenes de skills 
+
+<a href='https://www.youtube.com/watch?v=bVf3DqkiPw8'>https://www.youtube.com/watch?v=bVf3DqkiPw8</a>
+
+- Las imagenes van alojadas en **client -> assets** y estan en formato **.svg**.
+
+- Los componentes skill contienen una imagen y un titulo y se renderizan en una SkillsList dentro del componente Proyecto .
+
+- Nos valemos de **require.context()** para acceder al directorio de skill-images sin tener que importar cada imagen en el compenente skill 
+
+<a href='https://webpack.js.org/guides/dependency-management/#requirecontext'>https://webpack.js.org/guides/dependency-management/#requirecontext</a>
+
+- Repositorio de logos .svg : 
+
+<a href='https://worldvectorlogo.com/'>https://worldvectorlogo.com/</a>
+
+
+### Subir archivos (.md e imagenes) al servidor
+
+- Usamos **multer** para realizar el manejo de archivos .
+- Estos iran alojados en la carpeta uploads de server .
+
+### Vincular cada proyecto con archivos guardados 
+
+- Cada archivo de apuntes puede tener varios proyectos relacionados o tambien podemos decir que cada proyecto tiene varios archivos relacionados . 
+
+- Modificamos el modelo de proyecto agregandole el campo **files** que consiste en un array de **ObjectId** cada uno de los cuales corresponde a un registro de la **coleccion** **files**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

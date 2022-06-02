@@ -1,6 +1,9 @@
 import React from 'react';
 import './Proyecto.scss';
 
+import SkillsList from '../SkillsList';
+
+
 export default function Proyecto(data) {
 
   const {title,description,skills,link} = data;
@@ -18,8 +21,9 @@ export default function Proyecto(data) {
           <div className='project-link'>
             <a href ={link}>Ver proyecto</a>
           </div>
+
           <div className='project-skills'>
-            {skills}
+            <SkillsList skills={skills}/>
           </div>
             
           <div className='project-description'>

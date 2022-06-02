@@ -9,7 +9,11 @@ const ProjectSchema = Schema({
     skills: [{
         type: String
     }],
+    files:[{
+        type:mongoose.Types.ObjectId
+    }],
     description: String,
+    
     
 })
 

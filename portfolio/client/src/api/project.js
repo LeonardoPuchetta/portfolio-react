@@ -1,5 +1,4 @@
 //funciones para conectar con los endpoints de project
-
 import {basePath,apiVersion}from './config';
 
 export function newProjectApi(data){
@@ -41,10 +40,29 @@ export function getProyectsApi(){
             return response.json()
         }).then(result => {
             return result
-        }).catch(err =>{
-            return err.message
+        }).catch(error =>{
+            return error.message
         })
 
 
 }
+
+export function getImageSkillApi(skill){
+
+    const skillToLowerCase = skill.toLowerCase();
+
+    const url=`${basePath}/${apiVersion}/get-image-skill/${skillToLowerCase}`;
+
+    return fetch(url)
+                .then(response => {
+                    return response
+                }).catch(error =>{
+                    return error.message
+                })
+
+
+
+}
+
+
 

@@ -1,6 +1,8 @@
 // importacion del modelo 
 
-const { request } = require('../app');
+const fs = require('fs');
+const path = require('path');
+//const { request } = require('../app');
 const Project = require('./../models/project');
 
 // funcionalidades 
@@ -51,18 +53,44 @@ function getProjects(request,response){
         })
 }
 
-function uploadImage(request,response){
-    //para recibir id del proyecto
-    const params = request.params ; 
 
-    console.log('imagen please');
+function getImageSkill(request,response){
+
+    //recibimos la skill en formato lowerCase
+    const skillName = request.params.skill;
+
+    //completamos url de la imagen 
+    //solo contaremos con imagenes en formato .svg
+    const filePath = "./../uploads/skills-images/" + skillName + ".svg" ;
+
+    //generamos una ruta absoluta
+    const pathImage= path.join(__dirname,filePath);
+    
+    //comprobamos si la imagen existe y en caso que podamos leerla la retornamos 
+    if(fs.existsSync(pathImage)){
+        fs.readFile(pathImage,(err,data)=>{
+            if(err){
+                console.log(err)
+            } else {
+                response.sendFile(path.resolve(pathImage))
+            }
+        })
+    } else {
+        response.status(404).send({message:"Imagen no encontrada"});
+    }
+
 }
+
+
+
 
 // exportacion de las funcionalidades 
 
 module.exports = {
     newProject,
     getProjects,
-    uploadImage
+    
+    getImageSkill
+
 
 }

@@ -17,6 +17,9 @@ const [inputs,setInputs] = useState({
 
 });
 
+//constante para recibir archivos cargados en el formulario
+const [selectedFiles,setSelectedFiles] = useState([{}]);
+
 //funcion de onChange del formulario
 const changeForm = (event) => {
 
@@ -28,6 +31,19 @@ const changeForm = (event) => {
         })
     } 
     
+}
+
+const handleFiles = (event) => {
+
+    //extraemos los archivos del evento 
+    const files = event.target.files
+    
+    // files es una lista de objetos
+
+
+    console.log(files[0]);
+    console.log(selectedFiles)
+
 }
 
 
@@ -110,9 +126,20 @@ const resetForm = () => {
                     <label id="skill-label" className='label-description'><input type="checkbox" id="css-ckeckbox" value="CSS" name='checkbox'/>CSS</label>
                     <label id="skill-label" className='label-description'><input type="checkbox" id="javascript-ckeckbox" value="Javascript"name='checkbox'/>Javascript</label>
                     <label id="skill-label" className='label-description'><input type="checkbox" id="javascript-ckeckbox" value="NodeJS"name='checkbox'/>NodeJS</label>
+                    <label id="skill-label" className='label-description'><input type="checkbox" id="github-ckeckbox" value="Github"name='checkbox'/>Github</label>
 
             </div>
 
+            <div className='upload-files'>
+                <label id="upload-files-label" className='label-description'>
+                    <input type="file" 
+                        id="upload-file" 
+                        onChange={(event)=>handleFiles(event)} 
+                        value={selectedFiles}
+                        multiple/>
+                </label>
+                
+            </div>   
 
             <button type='submit' id='submit' className='btn' >
                 <span>Nuevo proyecto</span>
