@@ -26,3 +26,29 @@ export function uploadFileApi(file){
 
 
 }
+
+export function uploadImageApi(file){
+
+    const url = `${basePath}/${apiVersion}/upload-image`;
+
+    const formData = new FormData() ;
+    formData.append("file",file);
+
+
+    const params ={
+        method: 'POST',
+        body: formData,
+      
+    };
+
+    return fetch(url,params)
+            .then(response => {
+                return response.json()
+            }).then(result => {
+                return result
+            }).catch(err =>{
+                return err
+            })
+
+
+}

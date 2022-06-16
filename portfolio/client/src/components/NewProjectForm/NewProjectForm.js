@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { newProjectApi } from './../../api/project'
 import { uploadFileApi } from '../../api/fileProject';
+import { uploadImageApi } from '../../api/fileProject';
 
 
 export default function NewProjectForm() {
@@ -121,10 +122,16 @@ const register = (event) =>{
     //guardar datos en la base 
     const resulto = newProjectApi(inputs);
 
-    //guardar un archivos en el servidor 
-     selectedFiles.forEach((file) => {
+    //guardar archivos en el servidor 
+    selectedFiles.forEach((file) => {
     uploadFileApi(file); 
-    })
+    });
+
+    //guardar imagenes en el servidor 
+    selectedImages.forEach((file) => {
+        uploadImageApi(file); 
+        });
+
 
     resetForm();
 
@@ -155,12 +162,14 @@ const resetForm = () => {
     });
     //vaciamos input de files 
      document.getElementById('upload-file').value = '';
-
+    //vaciamos input de imagenes 
+    document.getElementById('upload-image').value = '';
 
 
 }
 
 //funcion para validar extensiones 
+//recibe archivo a array de extensiones admitidas
 const validExtension = (file,ext) => {
 
     let isValid = false ; 

@@ -2,6 +2,7 @@
 
 const FileProject = require('./../models/fileProject');
 
+//funcion para registrar archivos subidos
 function uploadFile(request,response){
 
     //extraemos el archivo y el body de la request
@@ -14,6 +15,35 @@ function uploadFile(request,response){
         const newFile = new FileProject({
             fileName : `${name}`,
             urlFile : `./../uploads/project-files/${name}`
+
+        });
+
+        newFile.save((error,fileStored)=>{
+            if (error){
+                response.status(500).send({message : 'Error en el servidor'})
+            } else {
+                if(!fileStored){
+                    response.status(404).send({message:'Error al guardar archivo'})
+                } else {
+                    response.status(200).send({newFile:fileStored})
+                }
+            }
+        })
+
+    }
+}
+function uploadImage(request,response){
+
+    //extraemos el archivo y el body de la request
+    const {body,file} = request;
+
+    if (file && body){
+
+        const name = file.filename;
+
+        const newFile = new FileProject({
+            fileName : `${name}`,
+            urlFile : `./../uploads/project-images/${name}`
 
         });
 
@@ -56,7 +86,7 @@ function uploadFile(request,response){
 
 module.exports = {
     uploadFile,
-    //getFile
+    uploadImage
 }
 
 

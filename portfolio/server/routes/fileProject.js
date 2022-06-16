@@ -8,10 +8,13 @@ const storage = require('./../config/multer');
 
 const uploader = multer ({storage});
 
+
 //variable para generar rutas 
 const api = express.Router();
 
 api.post('/upload-file',uploader.single('file'),FileProjectController.uploadFile);
+api.post('/upload-image',uploader.single('file'),FileProjectController.uploadImage);
+
 
 
 
