@@ -17,7 +17,6 @@
 |Funcionalidad de creacion de nuevos proyectos|Create|**listo**|
 |Formulario de nuevos proyectos|------------------|**listo**|
 |Validar formulario de nuevos proyectos|------------------|pendiente|
-|CSS de formulario|------------------|pendiente|
 |Agregar clave para ingresar nuevo proyecto|------------------|pendiente|
 |Renderizar imagenes de Skills en componentes|------------------|**listo**|
 |Funcionalidad de modificacion de proyectos|Update|pendiente|
@@ -25,14 +24,15 @@
 |Formulario de update para proyectos ya existentes|------------------|pendiente|
 |Subir archivos (.md e imagenes) al servidor |------------------|**listo**|
 |Obtener nombre de archivo y path de la base de datos|------------------ |**listo**|
-|Subida de archivos en formulario de nuevo proyecto |-----------------|pendiente|
+|Subida de archivos en formulario de nuevo proyecto |-----------------|**listo**|
+|Realizar subida de imagenes y validar extensiones de archivos e imagenes |------------------|pendiente|
 |Configurar descarga de archivos mediante vista del server mediante vista o visualizar archivo .md en linea ||pendiente|
-|Vincular archivos subidos con el proyecto  |------------------|pendiente|
-|incluir opcion en formulario de nuevo proyecto (input tipo file)|------------------|pendiente|
+|Vincular archivos subidos con el proyecto  |------------------|**listo**|
 ||------------------|
 ||------------------|
 ||------------------|
 |Colores y fuentes |CSS|pendiente|
+|CSS de formulario|------------------|pendiente|
 |Hacer font-size responsive|------------------|pendiente|
 |Dark-mode button en el header|------------------|pendiente|
 
@@ -258,11 +258,48 @@ donde hemos usado **fs** y **path**:
 - Usamos **multer** para realizar el manejo de archivos .
 - Estos iran alojados en la carpeta uploads de server .
 
+- Debemos configurar multer para poder elegir varios archivos , una vez elegidos estos archivos debemos rellaenar el array files de project con el nombre de estos archivos . 
+
+
+
 ### Vincular cada proyecto con archivos guardados 
 
 - Cada archivo de apuntes puede tener varios proyectos relacionados o tambien podemos decir que cada proyecto tiene varios archivos relacionados . 
 
-- Modificamos el modelo de proyecto agregandole el campo **files** que consiste en un array de **ObjectId** cada uno de los cuales corresponde a un registro de la **coleccion** **files**
+- Idea 1: podemos agregar a cada archivo subido un array de numbers correspondiente a los id de cada proyecto y realizar un renderizado condicional recorriendo dicho array . Si el "id_project" es igual alguno de los elementos de dicho array entonces renderizamos en el componente Proyecto un elemento con la imagen en miniatura del archivo .md y un link para descargar el archivo .
+- **Idea 2 : podemos usar el fileName del archivo , cada project tendra un array **files** con los fileName a renderizar** .
+
+### Subida de archivos en formulario de nuevo proyecto
+
+- Una vez que clickeado "Nuevo Proyecto" los archivos seleccionados deben guardarse en las carpetas del servidor correspondientes , esta tarea se ejecuta utilizando **multer** por medio de la funcion **uploadFile** del controlador fileProject pasandole el midlleware uploader
+
+~~~
+api.post('/upload-file',uploader.single('file'),FileProjectController.uploadFile);
+~~~
+- **en el server** 
+
+ - **uploadFile** realiza un registro en la base de los archivos guardados con nombre del archivo y path 
+
+- **uploader.single('file')** establece un path de destino de los archivos guardados y realiza el guardado en la carpeta uploads/project-files 
+
+- **en el client**
+
+- **uploadFileApi(file)** recibe como parametro un archivo , lo coloca en un **FormData** y realiza el llamado a la funcion del server por medio de la url y el metodo POST con el formData en el body 
+
+- finalmente recorremos el array **selectedFiles** con uploadFileApi
+
+
+### Realizar subida de imagenes y validar extensiones de archivos e imagenes
+
+- Se validaran extensiones de archivos en las funciones handleFiles y handleImages .
+
+
+
+
+
+
+
+
 
 
 

@@ -1,15 +1,11 @@
 
-const { isObjectIdOrHexString } = require('mongoose');
+
 const FileProject = require('./../models/fileProject');
 
 function uploadFile(request,response){
 
     //extraemos el archivo y el body de la request
     const {body,file} = request;
-
-    //console.log(file);
-
-  
 
     if (file && body){
 
@@ -36,31 +32,31 @@ function uploadFile(request,response){
     }
 }
 
-function getFile(request,response){
+// function getFile(request,response){
 
-    //recuperamos id de la peticion 
-    const {id} = request.params ;
-    console.log(id);
+//     //recuperamos id de la peticion 
+//     const {id} = request.params ;
+//     console.log(id);
    
-    FileProject.find({"_id":id}).then((file)=>{
-        if(!file){
-            response.status(404).send({message:"No se han encontrado archivos"})
-        } else {
-            response.status(200).send({file})
-        }
-    })
+//     FileProject.find({"_id":id}).then((file)=>{
+//         if(!file){
+//             response.status(404).send({message:"No se han encontrado archivos"})
+//         } else {
+//             response.status(200).send({file})
+//         }
+//     })
 
 
 
-console.log('dame un file')
+// console.log('dame un file')
 
-}
+// }
 
 
 
 module.exports = {
     uploadFile,
-    getFile
+    //getFile
 }
 
 

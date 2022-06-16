@@ -4,15 +4,17 @@ const Schema = mongoose.Schema ;
 
 const ProjectSchema = Schema({
     title : String,
-    image:String,
     link : String,
+    description : String,
     skills: [{
         type: String
     }],
     files:[{
-        type:mongoose.Types.ObjectId
+        type: String
     }],
-    description: String,
+    images:[{
+        type: String
+    }],
     
     
 })

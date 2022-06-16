@@ -14,19 +14,20 @@ function newProject(request,response){
 
     //console.log(request.body)
 
-    const {title,link,skills,description} = request.body;
+    const {title,link,skills,description,files,images} = request.body;
 
     project.title= title;
     project.link=link;
     project.skills=skills;
     project.description=description;
-    //nos falta cargar la imagen del proyecto 
-    project.image = "null"
+    project.files=files;
+    project.images=images;
     
 
     project.save((err,projectStored) => {
         if (err) {
-            response.status(500).send({message:"Error del servidor"})
+           response.status(500).send({message:"Error del servidor"})
+          
         } else {
             if (!projectStored){
                 response.status(404).send({message:"Error al crear el proyecto"})
@@ -89,7 +90,6 @@ function getImageSkill(request,response){
 module.exports = {
     newProject,
     getProjects,
-    
     getImageSkill
 
 

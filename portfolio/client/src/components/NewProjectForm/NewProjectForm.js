@@ -3,9 +3,16 @@ import './NewprojectForm.scss';
 import { useState } from 'react';
 
 import { newProjectApi } from './../../api/project'
+import { uploadFileApi } from '../../api/fileProject';
 
 
 export default function NewProjectForm() {
+
+//extensiones de archivos permitidos 
+const validExtensionFile = ["md"] ;
+//extensiones de imagenes permitidas
+const validExtensionImage = ["jpg","jpeg","gif","png"];
+
 
 const [inputs,setInputs] = useState({
 
@@ -13,14 +20,17 @@ const [inputs,setInputs] = useState({
     link: "",
     skills:[],
     description:"",
-    image:"" 
+    images:[],
+    files:[]
 
 });
 
 //constante para recibir archivos cargados en el formulario
-const [selectedFiles,setSelectedFiles] = useState([{}]);
+const [selectedFiles,setSelectedFiles] = useState([]);
+//constante para recibir imagenes cargadas en el formulario 
+const [selectedImages,setSelectedImages] = useState([]);
 
-//funcion de onChange del formulario
+//funcion de onChange para cada input 
 const changeForm = (event) => {
 
     //vamos a guardar los valores que no son los checkbox 
@@ -32,20 +42,55 @@ const changeForm = (event) => {
     } 
     
 }
-
+//funcion para cargar archivos en un estado 
 const handleFiles = (event) => {
 
-    //extraemos los archivos del evento 
-    const files = event.target.files
-    
-    // files es una lista de objetos
+    event.preventDefault();
 
+    //extraemos la lista de archivos del evento 
+    const { files } = event.target;
 
-    console.log(files[0]);
-    console.log(selectedFiles)
+    //creamos una arreglo para guardar los archivos seleccionados 
+    const arrayFiles = [] ; 
+
+    //recorremos el objeto FileList y guardamos en el arreglo
+    Array.from(files).forEach((file) => {
+
+        if (validExtension(file,validExtensionFile)){
+        arrayFiles.push(file);
+        } else {
+            return alert('Extension de archivos invalida,revise los archivos cargados')
+        }
+     });
+    //asignamos dicho array al estado selectedFiles
+    setSelectedFiles(arrayFiles)
 
 }
 
+//funcion para cargar imagenes del proyecto 
+const handleImages = (event) => {
+
+    event.preventDefault();
+    //extraemos la lista de imagenes del evento 
+    const { files } = event.target;
+
+    //creamos una arreglo para guardar las imagenes seleccionadas 
+    const arrayImages = []
+
+    //recorremos el objeto FileList y guardamos en el arreglo
+    Array.from(files).forEach((image) => {
+
+        if (validExtension(image,validExtensionImage)){
+        arrayImages.push(image);
+        } else {
+            return alert('Extension de archivos invalida,revise los archivos cargados')
+        }
+     });
+    //asignamos dicho array al estado selectedImages
+    setSelectedImages(arrayImages)
+
+
+}
 
 //funcion de registro de nuevo proyecto
 const register = (event) =>{
@@ -59,10 +104,27 @@ const register = (event) =>{
         inputs.skills.push(checkbox.value);
          }
              });
+
+    //recolectamos nombres de los archivos para guardar en la base 
+    selectedFiles.forEach((file)=>{
+    inputs.files.push(file.name);
+    });
+    //recolectamos nombres de las imagenes para guardar en la base 
+    selectedImages.forEach((image)=>{
+    inputs.images.push(image.name);
+    });
+    
+    console.log(inputs.files)
+    console.log(inputs.images)
+
     
     //guardar datos en la base 
-
     const resulto = newProjectApi(inputs);
+
+    //guardar un archivos en el servidor 
+     selectedFiles.forEach((file) => {
+    uploadFileApi(file); 
+    })
 
     resetForm();
 
@@ -70,6 +132,9 @@ const register = (event) =>{
 
 //limpieza del formulario
 const resetForm = () => {
+
+    //limpiamos los archivos del estado 
+    setSelectedFiles([]);
 
     //limpiamos los checkbox
     let checkboxes = document.querySelectorAll('input[name="checkbox"]:checked');
@@ -83,32 +148,56 @@ const resetForm = () => {
         link: "",
         skills:[],
         description:"",
-        image:"" 
+        image:"",
+        images:[],
+        files:[] 
     
-    })
+    });
+    //vaciamos input de files 
+     document.getElementById('upload-file').value = '';
 
 
 
 }
 
+//funcion para validar extensiones 
+const validExtension = (file,ext) => {
 
+    let isValid = false ; 
 
+    //extraemos la extension del archivo cargado y la pasamos a minusculas 
+    let extension = file.name.split('.');
+   //la extension es el ultimo elemento del array creado con split()
+    let extensionFile= extension[extension.length - 1];
+    //pasamos la extension a minusculas 
+    let extensionFileLower = extensionFile.toLowerCase();
+ 
+    ext.forEach((ex)=>{
+        if (ex === extensionFileLower){
+            isValid = true
+        }
+    })
+    
+    return isValid
+
+ 
+}
 
   return (
      
    
-       <form className='project-form' name='projectForm' onChange={changeForm} onSubmit={register}>
+       <form className='project-form' name='projectForm'  onSubmit={register}>
 
             <label id='title-label' className='label-description' htmlFor='title'>
             <span>Titulo </span></label>
             <input name='title' type='text' placeholder='Nombre del proyecto' 
-            id='title' className='input-form'  value={inputs.title} required/>
+            id='title' className='input-form'  value={inputs.title} onChange={changeForm} required/>
         
         
             <label id='link-label' className='label-description' htmlFor='link'>
             <span>Link</span></label>
-            <input name='link' type='text' placeholder='Link del proyecto' 
-            id='link'  className='input-form'  value={inputs.link} required/>
+            <input name='link' type='link' placeholder='Link del proyecto' 
+            id='link'  className='input-form'  value={inputs.link} onChange={changeForm} required/>
        
 
 
@@ -116,7 +205,7 @@ const resetForm = () => {
             <span>Descripcion</span>
             </label>
             <textarea name='description' className='textarea-form' id='description'
-            value={inputs.description} required></textarea>
+            value={inputs.description} onChange={changeForm} required></textarea>
 
 
 
@@ -130,16 +219,29 @@ const resetForm = () => {
 
             </div>
 
-            <div className='upload-files'>
-                <label id="upload-files-label" className='label-description'>
+            <div className='upload-images'>
+                <label id="upload-images-label" className='label-description'>
+                    Selecciona las imagenes del proyecto
                     <input type="file" 
-                        id="upload-file" 
-                        onChange={(event)=>handleFiles(event)} 
-                        value={selectedFiles}
+                        id="upload-image" 
+                        onChange={(event)=>handleImages(event)} 
                         multiple/>
                 </label>
                 
-            </div>   
+            </div>
+
+            <div className='upload-files'>
+                <label id="upload-files-label" className='label-description'>
+                    Selecciona los archivos .md del proyecto 
+                    <input type="file" 
+                        id="upload-file" 
+                        onChange={(event)=>handleFiles(event)} 
+                        multiple/>
+                </label>
+                
+            </div>
+     
+      
 
             <button type='submit' id='submit' className='btn' >
                 <span>Nuevo proyecto</span>
