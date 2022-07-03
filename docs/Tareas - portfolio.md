@@ -19,14 +19,15 @@
 |Validar formulario de nuevos proyectos|------------------|pendiente|
 |Agregar clave para ingresar nuevo proyecto|------------------|pendiente|
 |Renderizar imagenes de Skills en componentes|------------------|**listo**|
+|Formulario de update para proyectos ya existentes|------------------|pendiente|
 |Funcionalidad de modificacion de proyectos|Update|pendiente|
 |Funcionalidad de borrado de proyectos|------------------|pendiente|
-|Formulario de update para proyectos ya existentes|------------------|pendiente|
 |Subir archivos (.md e imagenes) al servidor |------------------|**listo**|
 |Obtener nombre de archivo y path de la base de datos|------------------ |**listo**|
 |Subida de archivos en formulario de nuevo proyecto |-----------------|**listo**|
-|Realizar subida de imagenes y validar extensiones de archivos e imagenes |------------------|pendiente|
-|Configurar descarga de archivos mediante vista del server mediante vista o visualizar archivo .md en linea ||pendiente|
+|Realizar subida de imagenes y validar extensiones de archivos e imagenes |------------------|**listo**|
+|Visualizar imagenes de proyectos en el front |------------------|pendiente|
+|Configurar descarga de archivos mediante vista desde el server mediante vista o visualizar archivo .md en linea ||pendiente|
 |Vincular archivos subidos con el proyecto  |------------------|**listo**|
 ||------------------|
 ||------------------|
@@ -187,54 +188,8 @@ useEffect(() => {
 const arrayProjects = projectsList.projects;
 ~~~
 - extraemos el array de proyectos y renderizamos mediante una funcion **.map( )** con los componentes **Proyecto** y los datos de los elementos del array pasados por **props** a dichos componentes.
-~~~
-
-### Renderizar imagenes de Skills 
-
-- La idea primaria es que dichas imagenes esten alojadas en el **server/src/uploads/skills-image** en varios formatos, nos valdremos de array **skills** para traer dichas imagenes.  
-
-- Creamos un endpoint para buscar imagenes en dicha carpeta , en el server -> controllers -> project :
-
-function getImageSkill(request,response){
-
-    //recibimos la skill en formato lowerCase
-    const skillName = request.params.skill;
-
-    //completamos url de la imagen 
-    //solo contaremos con imagenes en formato .svg
-    const filePath = "./../uploads/skills-images/" + skillName + ".svg" ;
-
-    //generamos una ruta absoluta
-    const pathImage= path.join(__dirname,filePath);
-    
-    //comprobamos si la imagen existe y en caso que podamos leerla la retornamos 
-    if(fs.existsSync(pathImage)){
-        fs.readFile(pathImage,(err,data)=>{
-            if(err){
-                console.log(err)
-            } else {
-                response.sendFile(path.resolve(pathImage))
-            }
-        })
-    } else {
-        response.status(404).send({message:"Imagen no encontrada"});
-    }
-
-}
 
 
-donde hemos usado **fs** y **path**:
-
-<a href='https://nodejs.org/api/fs.html'>https://nodejs.org/api/fs.html</a>
-
-<a href='https://nodejs.org/api/path.html'>https://nodejs.org/api/path.html</a>
-
-**Esta por verse si este direccionamiento absoluto funciona al subir el server por ejemplo a Heroku**
-
-- Creamos el componente **Skill** para renderizar las skill de cada proyecto 
-- 
-
-~~~
 
 ### Renderizar imagenes de skills 
 
@@ -291,7 +246,38 @@ api.post('/upload-file',uploader.single('file'),FileProjectController.uploadFile
 
 ### Realizar subida de imagenes y validar extensiones de archivos e imagenes
 
-- Se validaran extensiones de archivos en las funciones handleFiles y handleImages .
+- Se validaran extensiones de archivos en las funciones handleFiles y handleImages en el componente NewProjectForm y antes de realizar el guardado de archivos en el servidor mediante la constante de configuarcion storage de multer .
+
+- En **storage** modificamos la constante agregando una direccion de guardado condicional dependiendo si tenemos una imagen o un archivo de texto .
+
+- En el controlador de fileProject agregamos la funcion uploadImage para registrar los archivos subidos al servidor y la utilizamos junto con el middleware multer para realizar la subida de archivos . 
+
+- En el front creamos la funcion uploadImageApi para conectar con estas funcionalidades . 
+
+### Visualizar archivos/imagenes en el front 
+
+- En el caso de la imagen del proyecto la misma se aloja en el server y es traida por getImageApi en el componente ImageCard. 
+
+
+
+- Tenemos los archivos/imagenes guardados en el servidor en una ruta conocida 
+- Por cada proyecto tenemos una lista de nombres de archivos a visualizar (en la base de datos ). 
+
+- Por cada proyecto ya contamos con el array de nombres de archivos de la base .
+
+- En la collection de fileProject contamos con el nombre completo de cada archivo y la url de los mismos (url en el server).Por lo tanto crearemos **getFile** que nos devuelve esta informacion cuando le proporcionamos un nombre de archivo .
+
+- En el controlador fileProject creamos getImage la cual recibe por params el nombre de la imagen y retorna el archivo . 
+
+- En el client creamos getImageApi 
+
+- Tenemos problemas : 
+- **sincronia del fetch con la asignacion de src del img**
+- 
+-**traer la imagen con el fetch y guardarla**
+ 
+
+<a href='https://morioh.com/p/1d57d600e537'>https://morioh.com/p/1d57d600e537</a>
 
 
 

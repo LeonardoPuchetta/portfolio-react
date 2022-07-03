@@ -12,9 +12,7 @@ const ProjectSchema = Schema({
     files:[{
         type: String
     }],
-    images:[{
-        type: String
-    }],
+    image: String
     
     
 })

@@ -6,25 +6,25 @@ export default function Home() {
 
 const [projectsList,setProjectsList] = useState([]);
 
+//traemos todos los proyectos de la base y los guardamos en una lista 
 useEffect(() => {
-    getProyectsApi().then(response => {
-      setProjectsList(response)
+  
+  getProyectsApi().then(response => {
+      setProjectsList(response);
+      
     })
+    //solo se ejecuta en la primera carga del componente 
 }, [])
 
 const arrayProjects = projectsList.projects;
-
-//console.log(arrayProjects);
-
 
   return (
     <div>
          {
          arrayProjects?.map((project,index) => {
-
           return (
           <Proyecto key={index} title={project.title} description = {project.description}
-              link={project.link} skills={project.skills} 
+              link={project.link} skills={project.skills} files={project.files} image={project.image}
           />
           ) })  
     } 

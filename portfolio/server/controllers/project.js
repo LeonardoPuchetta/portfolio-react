@@ -12,16 +12,15 @@ function newProject(request,response){
 
     const project = new Project();
 
-    //console.log(request.body)
 
-    const {title,link,skills,description,files,images} = request.body;
+    const {title,link,skills,description,files,image} = request.body;
 
     project.title= title;
     project.link=link;
     project.skills=skills;
     project.description=description;
     project.files=files;
-    project.images=images;
+    project.image=image;
     
 
     project.save((err,projectStored) => {
@@ -42,7 +41,7 @@ function newProject(request,response){
 
 
  }
-
+//para obtener informacion de proyectos desde la base 
 function getProjects(request,response){
 
         Project.find().then((projects)=>{
@@ -55,32 +54,33 @@ function getProjects(request,response){
 }
 
 
-function getImageSkill(request,response){
+// function getImageSkill(request,response){
 
-    //recibimos la skill en formato lowerCase
-    const skillName = request.params.skill;
+//     //recibimos la skill en formato lowerCase
+//     const skillName = request.params.skill;
 
-    //completamos url de la imagen 
-    //solo contaremos con imagenes en formato .svg
-    const filePath = "./../uploads/skills-images/" + skillName + ".svg" ;
+//     //completamos url de la imagen 
+//     //solo contaremos con imagenes en formato .svg
+//     const filePath = "./../uploads/skills-images/" + skillName + ".svg" ;
 
-    //generamos una ruta absoluta
-    const pathImage= path.join(__dirname,filePath);
+//     //generamos una ruta absoluta
+//     const pathImage= path.join(__dirname,filePath);
     
-    //comprobamos si la imagen existe y en caso que podamos leerla la retornamos 
-    if(fs.existsSync(pathImage)){
-        fs.readFile(pathImage,(err,data)=>{
-            if(err){
-                console.log(err)
-            } else {
-                response.sendFile(path.resolve(pathImage))
-            }
-        })
-    } else {
-        response.status(404).send({message:"Imagen no encontrada"});
-    }
+//     //comprobamos si la imagen existe y en caso que podamos leerla la retornamos 
+//     if(fs.existsSync(pathImage)){
+//         fs.readFile(pathImage,(err,data)=>{
+//             if(err){
+//                 console.log(err)
+//             } else {
+//                 response.sendFile(path.resolve(pathImage))
+//             }
+//         })
+//     } else {
+//         response.status(404).send({message:"Imagen no encontrada"});
+//     }
 
-}
+// }
+
 
 
 
@@ -90,7 +90,7 @@ function getImageSkill(request,response){
 module.exports = {
     newProject,
     getProjects,
-    getImageSkill
+    
 
 
 }

@@ -37,10 +37,8 @@ const storage = multer.diskStorage({
         //const extension = file.mimetype.split('/')[1];
         //const name = file.originalname.split('.')[0];
         // const realName = name +'.'+ extension;
-       const realName = file.originalname
-        console.log(realName)
-
-        callback(null,realName)
+    const realName = file.originalname
+    callback(null,realName)
     }
 })
 

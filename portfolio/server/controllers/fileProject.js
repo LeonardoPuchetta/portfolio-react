@@ -1,4 +1,5 @@
-
+const fs = require('fs');
+const path = require('path');
 
 const FileProject = require('./../models/fileProject');
 
@@ -61,32 +62,71 @@ function uploadImage(request,response){
 
     }
 }
+//funcion para retornar archivos al recibir por params el nombre del mismo 
+function getFile(request,response){
 
-// function getFile(request,response){
+    const {name} = request.params;
+    
+    const filePath = "./../uploads/project-files/" + name ; 
 
-//     //recuperamos id de la peticion 
-//     const {id} = request.params ;
-//     console.log(id);
-   
-//     FileProject.find({"_id":id}).then((file)=>{
-//         if(!file){
-//             response.status(404).send({message:"No se han encontrado archivos"})
-//         } else {
-//             response.status(200).send({file})
-//         }
-//     })
+    //generamos una ruta absoluta 
+    const pathFile = path.join(__dirname,filePath);
 
 
+    //comprobamos si la imagen existe y en caso que podamos leeerla la retornamos 
+    if(fs.existsSync(pathFile)){
+        fs.readFile(pathFile,(err,data)=>{
+            if(err){
+                console.log(err)
+            } else {
+                response.sendFile(path.resolve(pathFile))
+            }
+        })
+    } else {
+        response.status(404).send({message:"Archivo no encontrado"});
+    }
 
-// console.log('dame un file')
 
-// }
+}
+
+//funcion para retornar imagenes al recibir por params el nombre de la misma 
+function getImage (request,response){
+
+    const {name} = request.params;
+    
+    const filePath = "./../uploads/project-images/" + name ; 
+
+    //generamos una ruta absoluta 
+    const pathImage = path.join(__dirname,filePath);
+
+
+    //comprobamos si la imagen existe y en caso que podamos leeerla la retornamos 
+    if(fs.existsSync(pathImage)){
+        fs.readFile(pathImage,(err,data)=>{
+            if(err){
+                console.log(err)
+            } else {
+                response.sendFile(path.resolve(pathImage))
+            }
+        })
+    } else {
+        response.status(404).send({message:"Imagen no encontrada"});
+    }
+
+}
+
+
+
+
+
 
 
 
 module.exports = {
     uploadFile,
-    uploadImage
+    uploadImage,
+    getFile,
+    getImage
 }
 
 

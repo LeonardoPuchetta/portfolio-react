@@ -47,22 +47,7 @@ export function getProyectsApi(){
 
 }
 
-export function getImageSkillApi(skill){
 
-    const skillToLowerCase = skill.toLowerCase();
-
-    const url=`${basePath}/${apiVersion}/get-image-skill/${skillToLowerCase}`;
-
-    return fetch(url)
-                .then(response => {
-                    return response
-                }).catch(error =>{
-                    return error.message
-                })
-
-
-
-}
 
 
 

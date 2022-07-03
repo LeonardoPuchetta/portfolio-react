@@ -21,15 +21,15 @@ const [inputs,setInputs] = useState({
     link: "",
     skills:[],
     description:"",
-    images:[],
+    image:"",
     files:[]
 
 });
 
 //constante para recibir archivos cargados en el formulario
 const [selectedFiles,setSelectedFiles] = useState([]);
-//constante para recibir imagenes cargadas en el formulario 
-const [selectedImages,setSelectedImages] = useState([]);
+//constante para recibir imagen cargada en el formulario 
+const [selectedImage,setSelectedImage] = useState([]);
 
 //funcion de onChange para cada input 
 const changeForm = (event) => {
@@ -60,6 +60,7 @@ const handleFiles = (event) => {
         if (validExtension(file,validExtensionFile)){
         arrayFiles.push(file);
         } else {
+            document.getElementById('upload-file').value = "";
             return alert('Extension de archivos invalida,revise los archivos cargados')
         }
      });
@@ -69,28 +70,22 @@ const handleFiles = (event) => {
 }
 
 //funcion para cargar imagenes del proyecto 
-const handleImages = (event) => {
+const handleImage = (event) => {
 
     event.preventDefault();
     //extraemos la lista de imagenes del evento 
     const { files } = event.target;
 
-    //creamos una arreglo para guardar las imagenes seleccionadas 
-    const arrayImages = []
+    const image = files[0];
 
-    //recorremos el objeto FileList y guardamos en el arreglo
-    Array.from(files).forEach((image) => {
-
-        if (validExtension(image,validExtensionImage)){
-        arrayImages.push(image);
+        if (validExtension(image,validExtensionImage)){    
+            setSelectedImage(image)
+       
         } else {
+            document.getElementById('upload-image').value = ""; 
             return alert('Extension de archivos invalida,revise los archivos cargados')
         }
-     });
-    //asignamos dicho array al estado selectedImages
-    setSelectedImages(arrayImages)
-
-
+  
 }
 
 //funcion de registro de nuevo proyecto
@@ -111,12 +106,12 @@ const register = (event) =>{
     inputs.files.push(file.name);
     });
     //recolectamos nombres de las imagenes para guardar en la base 
-    selectedImages.forEach((image)=>{
-    inputs.images.push(image.name);
-    });
+    //selectedImages.forEach((image)=>{
+    inputs.image = (selectedImage.name);
+    //});
     
     console.log(inputs.files)
-    console.log(inputs.images)
+    console.log(inputs.image)
 
     
     //guardar datos en la base 
@@ -128,10 +123,10 @@ const register = (event) =>{
     });
 
     //guardar imagenes en el servidor 
-    selectedImages.forEach((file) => {
-        uploadImageApi(file); 
-        });
-
+    // selectedImages.forEach((file) => {
+    //     uploadImageApi(file); 
+    //     });
+    uploadImageApi(selectedImage)
 
     resetForm();
 
@@ -156,7 +151,6 @@ const resetForm = () => {
         skills:[],
         description:"",
         image:"",
-        images:[],
         files:[] 
     
     });
@@ -233,8 +227,9 @@ const validExtension = (file,ext) => {
                     Selecciona las imagenes del proyecto
                     <input type="file" 
                         id="upload-image" 
-                        onChange={(event)=>handleImages(event)} 
-                        multiple/>
+                        onChange={(event)=>handleImage(event)}
+                        
+                        />
                 </label>
                 
             </div>

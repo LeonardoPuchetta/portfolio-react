@@ -6,6 +6,7 @@ const {API_VERSION} = require('./config');
 
 //carga rutas de project
 const projectRoutes = require('./routes/project');
+//carga rutas de fileProject
 const fileProjectRoutes = require('./routes/fileProject');
 
 //para poder tomar datos del body de la peticion

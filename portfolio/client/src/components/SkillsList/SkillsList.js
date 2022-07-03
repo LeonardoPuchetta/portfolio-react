@@ -13,12 +13,9 @@ const {skills} = props ;
       <div>
 {
     skills.map((skill,index) => {
-        
-
-     return (
-
-        <Skill key={index} name={skill}/>
-        )
+                return (
+                    <Skill key={index} name={skill}/>
+                    )
     } )               
 }
     </div>
