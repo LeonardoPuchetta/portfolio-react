@@ -66,7 +66,7 @@ export function  getFileApi(name){
 
         return fetch(url,params)
         .then(response => {
-            return response
+            return response.blob()
         }).then(result => {
             return result
         }).catch(error =>{

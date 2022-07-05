@@ -12,7 +12,6 @@
 |Diagramar Layouts |vamos a hacerlo con css grid y flexbox , header y content |**listo**|
 |Resolver Icons del Header|puede ser con **antd**|**listo**|
 |Resolver posiciones en el layout-header-footer-content|------------------|**listo**|
-|----------------|------------------|pendiente|
 |Modelos de info para la base mongoDB|------------------|**listo**|
 |Funcionalidad de creacion de nuevos proyectos|Create|**listo**|
 |Formulario de nuevos proyectos|------------------|**listo**|
@@ -26,7 +25,7 @@
 |Obtener nombre de archivo y path de la base de datos|------------------ |**listo**|
 |Subida de archivos en formulario de nuevo proyecto |-----------------|**listo**|
 |Realizar subida de imagenes y validar extensiones de archivos e imagenes |------------------|**listo**|
-|Visualizar imagenes de proyectos en el front |------------------|pendiente|
+|Visualizar imagenes de proyectos en el front |------------------|**listo**|
 |Configurar descarga de archivos mediante vista desde el server mediante vista o visualizar archivo .md en linea ||pendiente|
 |Vincular archivos subidos con el proyecto  |------------------|**listo**|
 ||------------------|
@@ -258,26 +257,103 @@ api.post('/upload-file',uploader.single('file'),FileProjectController.uploadFile
 
 - En el caso de la imagen del proyecto la misma se aloja en el server y es traida por getImageApi en el componente ImageCard. 
 
+- Vamos a leer los datos com una url , en ImageCard :
+~~~
+  //estado para guardar la URL generada 
+    const [fileDataURL, setFileDataURL] = useState(null);
+~~~
 
+y nos valdremos de getImageApi() para traer la imagen en el server en formato blob()
 
-- Tenemos los archivos/imagenes guardados en el servidor en una ruta conocida 
-- Por cada proyecto tenemos una lista de nombres de archivos a visualizar (en la base de datos ). 
+<a href='https://runebook.dev/es/docs/dom/response/blob'>https://runebook.dev/es/docs/dom/response/blob</a>
 
-- Por cada proyecto ya contamos con el array de nombres de archivos de la base .
-
-- En la collection de fileProject contamos con el nombre completo de cada archivo y la url de los mismos (url en el server).Por lo tanto crearemos **getFile** que nos devuelve esta informacion cuando le proporcionamos un nombre de archivo .
-
-- En el controlador fileProject creamos getImage la cual recibe por params el nombre de la imagen y retorna el archivo . 
-
-- En el client creamos getImageApi 
-
-- Tenemos problemas : 
-- **sincronia del fetch con la asignacion de src del img**
-- 
--**traer la imagen con el fetch y guardarla**
- 
+<a href='https://runebook.dev/es/docs/dom/blob'>https://runebook.dev/es/docs/dom/blob</a>
 
 <a href='https://morioh.com/p/1d57d600e537'>https://morioh.com/p/1d57d600e537</a>
+  
+- **Creamos la funcion readFile(file)**: 
+
+~~~
+ // funcion para leer el archivo de imagen 
+   function readImage(file) {
+  // Check if the file is an image.
+  // if (file.type && !file.type.startsWith('image/')) {
+  //   console.log('File is not an image.', file.type, file);
+  //   return;
+  // }
+
+  const reader = new FileReader();
+
+  reader.addEventListener('load', (event) => {
+    setFileDataURL(event.target.result)
+    //img.src = event.target.result;
+    
+  });
+  reader.readAsDataURL(file);
+  }
+~~~
+
+- No necesitamos chequear la extension de los archivos ya que desde el formulario de creacion esta ya es validada y estamos seguros de que es una imagen lo buscado. 
+
+- En esta funcion se crea un nuevo FileReader y se le agrega un escuchador de eventos que asigna al estado fileDataURL el result de dicho evento .
+
+- Luego asignamos al FileReader la lectura del blob() como 'DataURL'
+
+- **Asincronia en la lectura** : 
+
+- Finalmente simulamos un funcion asincrona mediante un setTimeOut para utilizar readImage : 
+
+~~~
+ const readWithDelay =  () => {
+  getImageApi(image).then(response => {
+    setTimeout(
+        readImage(response)
+    ,50);
+
+   });
+}
+~~~
+
+- **readImage recibira como parametro el resultado de la promesa getImageApi()**
+
+### Configurar descarga de archivos mediante vista desde el server  y/o visualizar archivo .md en linea
+
+
+ - Renderizamos un icono por cada archivo en la fileList de archivos .md 
+
+ - 
+
+- En el controlador de fileProject tenemos getFile(name) que nos devuelve el archivo alojado en :  /uploads/project-files
+
+~~~
+//funcion para retornar archivos al recibir por params el nombre del mismo 
+function getFile(request,response){
+
+    const {name} = request.params;
+    
+    const filePath = "./../uploads/project-files/" + name ; 
+
+    //generamos una ruta absoluta 
+    const pathFile = path.join(__dirname,filePath);
+
+
+    //comprobamos si la imagen existe y en caso que podamos leeerla la retornamos 
+    if(fs.existsSync(pathFile)){
+        fs.readFile(pathFile,(err,data)=>{
+            if(err){
+                console.log(err)
+            } else {
+                response.sendFile(path.resolve(pathFile))
+            }
+        })
+    } else {
+        response.status(404).send({message:"Archivo no encontrado"});
+    }
+
+
+}
+~~~
+
 
 
 

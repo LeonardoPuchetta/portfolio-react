@@ -30,7 +30,7 @@ export default function ImageCard(props) {
   
   }
 
- const read =  () => {
+ const readWithDelay =  () => {
 
   getImageApi(image).then(response => {
     setTimeout(
@@ -40,8 +40,7 @@ export default function ImageCard(props) {
    });
    
 }
-
-read()
+readWithDelay()
 
 
   return (
