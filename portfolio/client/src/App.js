@@ -8,8 +8,11 @@ import routes from './config/routes'
 
 import './App.scss';
 
+import AuthProvider from "./providers/AuthProvider";
+
 function App() {
   return (
+    <AuthProvider>
       <Router>
           <Routes>
             {routes.map((route,index) => (
@@ -22,7 +25,7 @@ function App() {
             ))}
           </Routes>
       </Router>
-
+      </AuthProvider>
   );
 }
 

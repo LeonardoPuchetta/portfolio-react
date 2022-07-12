@@ -23,7 +23,6 @@ export default function ImageCard(props) {
 
   reader.addEventListener('load', (event) => {
     setFileDataURL(event.target.result)
-    //img.src = event.target.result;
     
   });
   reader.readAsDataURL(file);

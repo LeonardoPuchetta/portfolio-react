@@ -10,10 +10,6 @@ export default function FileCard(props) {
 
 const {fileName} = props ;
 
-//const [infoFile,setInfoFile] = useState(null);
-//estado para guardar la URL generada 
-const [fileDataURL, setFileDataURL] = useState(null);
-
 const fileSplit = fileName.split(".");
 const fileAlt = fileSplit[0];
 
@@ -25,7 +21,7 @@ const handleClick = () => {
     //creacion de la objectURL mediante el blob    
     const href = URL.createObjectURL(response);
     
-    //creacion del anchior y seteo de propiedades
+    //creacion del anchor y seteo de propiedades
     const a = Object.assign(document.createElement('a'),{
         href,
         style: "display:none",
@@ -46,7 +42,6 @@ const handleClick = () => {
 
   };
    
-  
   return (
     <div>
         

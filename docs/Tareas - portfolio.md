@@ -15,22 +15,24 @@
 |Modelos de info para la base mongoDB|------------------|**listo**|
 |Funcionalidad de creacion de nuevos proyectos|Create|**listo**|
 |Formulario de nuevos proyectos|------------------|**listo**|
-|Validar formulario de nuevos proyectos|------------------|pendiente|
-|Agregar clave para ingresar nuevo proyecto|------------------|pendiente|
 |Renderizar imagenes de Skills en componentes|------------------|**listo**|
-|Formulario de update para proyectos ya existentes|------------------|pendiente|
-|Funcionalidad de modificacion de proyectos|Update|pendiente|
-|Funcionalidad de borrado de proyectos|------------------|pendiente|
 |Subir archivos (.md e imagenes) al servidor |------------------|**listo**|
 |Obtener nombre de archivo y path de la base de datos|------------------ |**listo**|
 |Subida de archivos en formulario de nuevo proyecto |-----------------|**listo**|
 |Realizar subida de imagenes y validar extensiones de archivos e imagenes |------------------|**listo**|
 |Visualizar imagenes de proyectos en el front |------------------|**listo**|
-|Configurar descarga de archivos mediante vista desde el server mediante vista o visualizar archivo .md en linea ||pendiente|
+|Configurar descarga de archivos mediante vista desde el server mediante vista o visualizar archivo .md en linea ||**listo**|
 |Vincular archivos subidos con el proyecto  |------------------|**listo**|
-||------------------|
-||------------------|
-||------------------|
+|Creacion de usuario administrador |------------------|**listo**|
+|Creacion formulario de login para usuario administrador |------------------|**listo**|
+|Login con jwt y manejo de tokens|------------------|**listo**|
+|Formulario de update para proyectos ya existentes|------------------|pendiente|
+|Funcionalidad de modificacion de proyectos|Update|pendiente|
+|Funcionalidad de borrado de proyectos|Delete|pendiente|
+|Validar formulario de nuevos proyectos|------------------|pendiente|
+|Pagina de Inicio|------------------|pendiente|
+||------------------||
+|Personalizar elementos de notificacion mediante hooks|https://coder-solution-es.com/solution-es-blog/1164768|pendiente|
 |Colores y fuentes |CSS|pendiente|
 |CSS de formulario|------------------|pendiente|
 |Hacer font-size responsive|------------------|pendiente|
@@ -121,7 +123,7 @@ con esto tendremos nuestras cajas de proyecto centradas y los margenes adecuados
 
 la idea es que el footer se vea al final del scroll en el pie de pagina
 
- ## Modelos de info para la base mongoDB 
+ ### Modelos de proyectos para la base mongoDB 
 
 Necesitamos un modelo para el Project a cargar en la base de datos y luego en los componentes Projecto.js 
 ~~~
@@ -319,11 +321,10 @@ y nos valdremos de getImageApi() para traer la imagen en el server en formato bl
 ### Configurar descarga de archivos mediante vista desde el server  y/o visualizar archivo .md en linea
 
 
- - Renderizamos un icono por cada archivo en la fileList de archivos .md 
+ - Renderizamos un icono por cada archivo en la fileList de archivos .md en el componente FileCard
 
- - 
 
-- En el controlador de fileProject tenemos getFile(name) que nos devuelve el archivo alojado en :  /uploads/project-files
+- En el controlador de fileProject tenemos getFile(name) que nos devuelve el archivo alojado en :  /uploads/project-files en formato blob.
 
 ~~~
 //funcion para retornar archivos al recibir por params el nombre del mismo 
@@ -353,6 +354,264 @@ function getFile(request,response){
 
 }
 ~~~
+- En el componente FileCard del cliente  : 
+~~~
+export default function FileCard(props) {
+
+const {fileName} = props ;
+
+const fileSplit = fileName.split(".");
+const fileAlt = fileSplit[0];
+
+const handleClick = () => {
+
+    //solicitamos el archivo en formato blob desde el server
+    getFileApi(fileName).then( response => {
+
+    //creacion de la objectURL mediante el blob    
+    const href = URL.createObjectURL(response);
+    
+    //creacion del anchior y seteo de propiedades
+    const a = Object.assign(document.createElement('a'),{
+        href,
+        style: "display:none",
+        download: `${fileName}`
+    })
+    //agregamos el elemento al body
+    document.body.appendChild(a);
+
+    //generamos un evento en el anchor creado
+    a.click();
+    //limpiamos la URL del navegador una vez echa la descarga
+    URL.revokeObjectURL(href);
+    //removemos la etiqueta creada
+    a.remove();
+    })
+
+  };
+   
+  return (
+    <div>
+            <img src={imgPath(`./markdown.svg`)} alt='file' title={fileAlt} type="img/svg"></img>
+            <button onClick={handleClick}>
+                Descargar
+            </button>
+        
+    </div>
+  )
+}
+~~~
+
+### Agregar funcionalidad de usuarios y permisos de edicion (Login con jwt y manejo de tokens)
+
+- Creamos en el controlador de user un endpoint para crear nuevos usuarios con role de administrador . 
+
+- Para encriptar contrasenas usaremos bcrypt : 
+**npm i bcrypt**
+- https://www.izertis.com/es/-/blog/encriptacion-de-password-en-nodejs-y-mongodb-bcrypt
+
+~~~
+function signUp(request,response){
+   //nueva instancia del modelo User
+   const user = new User();
+
+   const { name , password , repeatPassword } = request.body ; 
+
+   //asignamos valores uno a uno con user
+   user.name= name;
+   user.role= "admin";
+
+    //creamos una estructura condicional 
+    if (!password ||!repeatPassword) {  // si falla algun password 
+        
+        response.status(404).send({message: "Las contrasenas son obligatorias"})
+    } else {
+
+        if (password!==repeatPassword){
+            response.status(404).send({message: "Las contrasenas tienen que ser iguales"})
+        } else {
+            //vamos a encriptar la contrasena 
+            bcrypt.hash(password ,SALTS_TO_BCRYPT ,function (err , hash ) {
+                    
+                if (err){
+                    response.status(500).send({message: "Hubo un error de encriptacion "})
+                    
+                } else {
+                    // asignamos la contrasena al usuario 
+                    user.password= hash ; 
+                    // utilizamos una funcion de mongoose para guardar la contrsena en la base de datos 
+                    user.save((err , userStored )=>{
+                        if (err){
+                            response.status(500).send({message: "Error del servidor , el usuario ya existe "})
+
+                        } else {
+                                    if (!userStored){
+                                        response.status(404).send({message: "Error al crear el usuario "})
+
+                                    } else {
+                                        response.status(200).send({user:userStored})
+                                            }
+                                }
+                                                    })
+                        }
+            })
+        }
+    }}
+
+~~~
+
+- Las funcionalidades de edicion de proyectos y de ingreso de nuevos proyectos estaran restringidas a estos usuarios .
+
+- Mediante este endpoint y usando Postman ingresamos un admin en la base de datos con cotrasena.(en el futuro este endpoint estara protegido por tokens).
+
+- Creamos el endpoint signIn para poder ingresar como admin al Portfolio. **Este endpoint devolvera los tokens correspondientes en caso de que el usuario y contrasena sean correctos.**
+
+~~~
+function signIn(request,response){
+    const params = request.body ;
+    
+    const name= params.name;
+    const password= params.password;
+
+    //funcionalidad de mongoose para buscar en la base 
+    User.findOne({name} , (err, userStored) => {
+
+        if(err){
+            response.status(500).send({message:"Error del servidor."})
+        } else {
+            if (!userStored){
+                response.status(404).send({message:"Usuario no encontrado."})
+            } else {
+
+                // comparacion de contrasenas con bcrypt la ingresada con la encriptada
+                //el valor de la contrasena encriptada es userStored,password 
+                bcrypt.compare(password,userStored.password , (err,check)=>{
+
+                    if (err){
+                        response.status(500).send({message:"Error del servidor."})
+
+                    } else if (!check) {
+                       
+                        response.status(404).send({message:"La contrasena es incorrecta."})
+
+
+                    } else { 
+ 
+                            response.status(200).send({
+                                accessToken : jwt.createAccessToken(userStored),
+                                refreshToken : jwt.createRefreshToken(userStored)
+                                                })
+                            }
+                }) 
+            }
+        }
+    })
+}
+~~~
+
+- En el client creamos el componente LoginForm para ingresar como administrador , el mismo incluira un boton para ingresar como invitado 
+
+- Luego creamos signInApi() para realizar el login desde el client 
+
+~~~
+export function signInApi(dataUser) {
+
+    const url = `${basePath}/${apiVersion}/sign-in`;
+
+    const params = {
+        method: 'POST',                                            
+        body: JSON.stringify(dataUser),
+        headers: {
+            "Content-type":"application/json",                        
+        }
+
+    }
+
+    // retornamos un fetch() o sea una peticion asincrona
+    return fetch(url,params)
+
+    .then(response => {
+       return response.json()
+            }).then(result =>{
+                return result; 
+                })
+                    .catch(err => {
+                        return err.message
+                    })
+
+}
+~~~
+
+- Y usamos signInApi en la funcion login de nuestro componente LoginForm para **recibir el accessToken y el refreshToken como respuesta y guardarlos en el localStorage de la sesion**.
+
+- **Creamos en client -> src -> api -> auth.js 
+para decodificar los tokens recibidos** : 
+
+- La funcion **willExpireToken(token)** recibe un token y devuelve true o false si este esta caducado o sigue vigente respectivamente. 
+
+- La funcion **logout()** remueve los tokens del localStorage 
+
+- Las funciones **getAccessTokenApi()** y **getRefreshTokenApi()** devuelven los tokens access y refresh si estos estan vigentes en caso contrario devuelven **null**
+
+- La funcion **refreshAccessTokenApi(refreshToken)** refresca el token del lado del cliente 
+
+- **Creamos en **server-> controllers-> auth.js** el endpoint para refreshAccessToken** :
+
+- **willExpireToken(token)** verifica en el servidor si el token a expirado (devuleve true en este caso).
+
+- **refreshAccessToken** recibe el refreshToken , verifica si esta vigente y en caso de que lo este extrae el id del usuario del mismo y realiza una busqueda en la base con el id generando un nuevo accessToken con el usuario resultante ,finalmente devuelve el refreshToken y el accessToken.
+
+- **Creamos las rutas correspondientes en el server**
+
+### Manejo del contexto :
+
+- Creamos el hook **useAuth** el cual nos devolvera el contexto o datos del contexto 
+
+- Creamos la carpeta de **providers** con un archivo **AuthProvider.js** donde **crearemos el contexto** .
+
+- La idea principal es crear un **contexto** en el cual se envolvera toda nuestra app para saber si estamos ante administradores o no .
+
+- Envolvemos toda nuestra app en el contexto 
+~~~
+import AuthProvider from "./providers/AuthProvider";
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+          <Routes>
+            {routes.map((route,index) => (
+                  <Route  key={index} 
+                          path={route.path}
+                          element={ <route.layout>
+                                    <route.component/>
+                                    </route.layout>}
+                            />
+            ))}
+          </Routes>
+      </Router>
+    </AuthProvider>
+  );
+}
+~~~
+
+- Usamos admin y isLoading en los distintos componentes de la aplicacion , por ejemplo para bloquear la pagina de ingrso de nuevos proyectos a usuarios no logueados . 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
