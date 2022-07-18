@@ -226,6 +226,5 @@ Podemos utilizar el atributo **pattern** para restringir el campo de caracteres 
 
 
 
-## Formularios con React :
 
 

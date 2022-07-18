@@ -3,10 +3,26 @@ import Proyecto from '../components/Proyecto';
 import { getProyectsApi } from '../api/project';
 import { useNavigate } from 'react-router-dom';
 
+import UpdateProjectForm from './../components/UpdateProjectFrom';
+import Modal from './../components/Modal';
+
 export default function Home() {
 
 const [projectsList,setProjectsList] = useState([]);
 
+const [isVisibleModal,setIsVisibleModal] = useState(false);
+
+const [dataProjectModal,setDataProjectModal] = useState({
+
+  id:"",
+  title: "",
+  link: "",
+  skills:[],
+  description:"",
+  image:"",
+  files:[] 
+  
+})
 
 //traemos todos los proyectos de la base y los guardamos en una lista 
 useEffect(() => {
@@ -17,6 +33,7 @@ useEffect(() => {
 }, [])
 
 const arrayProjects = projectsList.projects;
+
 
 let navigate = useNavigate();
 //funcion para redireccionar al formulario de nuevos proyectos 
@@ -30,13 +47,25 @@ const toNewProject = () => {
          arrayProjects?.map((project,index) => {
           return (
           <Proyecto key={index} title={project.title} description = {project.description}
-              link={project.link} skills={project.skills} files={project.files} image={project.image}
-          />
+              link={project.link} skills={project.skills} files={project.files} image={project.image} id={project._id}
+              isVisibleModal={isVisibleModal} setIsVisibleModal={setIsVisibleModal}
+              dataProjectModal={dataProjectModal} setDataProjectModal={setDataProjectModal} />
           ) })  
     } 
+
     <div>
       <button onClick={toNewProject}>Nuevo Proyecto</button>
     </div>
+
+    <div>
+          <Modal children={<UpdateProjectForm dataProjectModal={dataProjectModal} 
+                            setIsVisibleModal={setIsVisibleModal} isVisibleModal={isVisibleModal}/>} 
+            title={dataProjectModal.title}  
+            isVisibleModal={isVisibleModal} 
+            setIsVisibleModal={setIsVisibleModal}
+            />
+    </div>
+       
     </div>
     
   )

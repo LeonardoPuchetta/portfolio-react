@@ -53,7 +53,48 @@ function getProjects(request,response){
         })
 }
 
+//funcion para modificar proyectos 
+function updateProject(request,response){
 
+    //recibimos la informacion por el body de la peticion 
+    const projectData = request.body;
+    //recibimos el id por los params 
+    const params = request.params
+
+    Project.findByIdAndUpdate({_id:params.id},projectData,(error,projectUpdate)=>{
+        if (error){
+            response.status(500).send({message:'Error en el servidor.'})
+        } else {
+            if (!projectUpdate){
+                response.status(404).send({message:'Proyecto no encontrado.'})
+            } else {
+                response.status(200).send({message:'Proyecto actualizado correctamente.'})
+            }
+        }
+    })
+
+
+}
+//funcion para borrar proyectos 
+ function deleteProject(request,response){
+
+    //recibimos el id por los params 
+    const params = request.params
+
+    Project.findByIdAndRemove({_id:params.id},(error,projectDeleted)=>{
+
+        if (error) {
+            response.status(500).send({message:'Error en el servidor'})
+        } else {
+            if (!projectDeleted){
+                response.status(404).send({message: 'Proyecto no encontrado'})
+            } else {
+                response.status(200).send({message:'Proyecto borrado correctamente'})
+            }
+        }
+
+    })
+ }
 // function getImageSkill(request,response){
 
 //     //recibimos la skill en formato lowerCase
@@ -90,6 +131,8 @@ function getProjects(request,response){
 module.exports = {
     newProject,
     getProjects,
+    updateProject,
+    deleteProject
     
 
 

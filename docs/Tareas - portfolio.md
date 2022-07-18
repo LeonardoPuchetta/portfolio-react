@@ -26,15 +26,16 @@
 |Creacion de usuario administrador |------------------|**listo**|
 |Creacion formulario de login para usuario administrador |------------------|**listo**|
 |Login con jwt y manejo de tokens|------------------|**listo**|
-|Formulario de update para proyectos ya existentes|------------------|pendiente|
-|Funcionalidad de modificacion de proyectos|Update|pendiente|
+|Creacion de middleware para proteger endpoints con login|------------------|**listo**|
+|Formulario de update para proyectos ya existentes|------------------|**listo**|
+|Funcionalidad de modificacion de proyectos|Update|**listo**|
 |Funcionalidad de borrado de proyectos|Delete|pendiente|
 |Validar formulario de nuevos proyectos|------------------|pendiente|
 |Pagina de Inicio|------------------|pendiente|
 ||------------------||
 |Personalizar elementos de notificacion mediante hooks|https://coder-solution-es.com/solution-es-blog/1164768|pendiente|
 |Colores y fuentes |CSS|pendiente|
-|CSS de formulario|------------------|pendiente|
+|CSS de formularios|------------------|pendiente|
 |Hacer font-size responsive|------------------|pendiente|
 |Dark-mode button en el header|------------------|pendiente|
 
@@ -597,6 +598,128 @@ function App() {
 
 - Usamos admin y isLoading en los distintos componentes de la aplicacion , por ejemplo para bloquear la pagina de ingrso de nuevos proyectos a usuarios no logueados . 
 
+
+### Formulario de update para proyectos ya existentes y funcionalidades de modificacion en la base (**UPDATE**)
+
+- Creamos el componente Modal el cual recibira como children al componente UpdateProjectForm y cambiara su visibilidad en funcion del estado **isVisibleModal**, este estado esta creado en la Home y es pasado por props tanto al componente Modal como al componente Proyecto para su modificacion. 
+
+- Otro elemento a considerar es que el componente UpdateProjectForm necesita la informacion del proyecto a modificar , para eso creamos un estado en la Home que recibe los datos del proyecto **dataProjectModal** , este estado es pasado por props a Proyecto y a UpdateProjectForm para su modificacion .
+
+- En el server creamos updateProject para realizar la modificacion .En el controlador de proyectos : 
+
+~~~
+//funcion para modificar proyectos 
+function updateProject(request,response){
+
+    //recibimos la informacion por el body de la peticion 
+    const projectData = request.body;
+    //recibimos el id por los params 
+    const params = request.params
+
+    Project.findByIdAndUpdate({_id:params.id},projectData,(error,projectUpdate)=>{
+        if (error){
+            response.status(500).send({message:'Error en el servidor.'})
+        } else {
+            if (!projectUpdate){
+                response.status(404).send({message:'Proyecto no encontrado.'})
+            } else {
+                response.status(200).send({message:'Proyecto actualizado correctamente.'})
+            }
+        }
+    })
+}
+~~~
+
+- Esta funcion recibe los datos a modificar en el body y el id del proyecto en los params 
+
+- Creamos el endpoint protegido por token en las routes: 
+~~~
+api.put('/update-project/:id',[md_auth.ensureAuth],ProjectController.updateProject);
+~~~
+
+- En las api del client (api/project.js) : 
+
+~~~
+export function updateProjectApi(projectData,projectId,token){
+
+    const url = `${basePath}/${apiVersion}/update-project/${projectId}`
+
+    const params ={
+        method: 'PUT',
+        body: JSON.stringify(projectData),
+        headers: {
+            "Content-type":"application/json",
+            "Authorization": token
+        }
+    };
+
+        // retornamos un fetch() o sea una peticion asincrona
+        return fetch (url ,params)
+        .then (response => {
+            return response.json()
+        })
+        .then (result => {
+            return result ; 
+        })  // por si tiene error , devuelve el mensaje de error del endpoint 
+        .catch(err=> {
+            return err.message
+        }   
+            )
+}
+~~~
+
+- El formulario de modificacion de proyecto es casi identico al de ingresar nuevos proyectos salvo por la funcion updateProject (client/components/UpdateProjectForm) :
+
+~~~
+    //funcion para modificar proyecto 
+    const updateProject = event => {
+
+    event.preventDefault();
+    //obtenemos el token 
+    const token = getAccessTokenApi();
+
+    //limpiamos valores de skills , files de los array 
+    projectData.skills = [];
+    projectData.files = []
+
+   
+    //guardamos los skills en el array de inputs 
+     let checkboxes = document.querySelectorAll('input[name="checkbox"]:checked');
+     checkboxes.forEach((checkbox) => {
+
+         if (!projectData.skills.includes(checkbox.value)){
+            projectData.skills.push(checkbox.value);
+         }
+             });
+
+    //recolectamos nombres de los archivos para guardar en la base 
+    selectedFiles.forEach((file)=>{
+        projectData.files.push(file.name);
+    });
+    //recolectamos nombres de las imagenes para guardar en la base 
+    //selectedImages.forEach((image)=>{
+        projectData.image = (selectedImage.name);
+    //});
+
+    updateProjectApi(projectData,dataProjectModal.id,token);
+
+    //guardar archivos en el servidor 
+    selectedFiles.forEach((file) => {
+        uploadFileApi(file); 
+    });
+
+    //guardar imagenes en el servidor 
+    uploadImageApi(selectedImage)
+
+    setIsVisibleModal(false)
+
+
+    console.log(projectData);
+    console.log(dataProjectModal.id)
+    }
+~~~
+
+- Esta funcion realiza el update del proyecto mediante updateProjectApi y cierra el modal , faltaria deplegar un aviso de "Proyecto ${name} modificado "
 
 
 

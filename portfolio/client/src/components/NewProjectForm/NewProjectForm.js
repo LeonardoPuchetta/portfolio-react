@@ -123,9 +123,6 @@ const register = (event) =>{
     });
 
     //guardar imagenes en el servidor 
-    // selectedImages.forEach((file) => {
-    //     uploadImageApi(file); 
-    //     });
     uploadImageApi(selectedImage)
 
     resetForm();
@@ -186,9 +183,19 @@ const validExtension = (file,ext) => {
  
 }
 
+//para cancelar el ingreso de datos y limpiar el formulario 
+const cancelBtn = document.querySelector('#cancel');
+
+if (cancelBtn){
+    cancelBtn.addEventListener('click',(event)=>{
+    event.preventDefault();
+    resetForm()
+   })
+}
+
+
   return (
      
-   
        <form className='project-form' name='projectForm'  onSubmit={register}>
 
             <label id='title-label' className='label-description' htmlFor='title'>
@@ -249,6 +256,9 @@ const validExtension = (file,ext) => {
 
             <button type='submit' id='submit' className='btn' >
                 <span>Nuevo proyecto</span>
+            </button>
+            <button type='cancel' id='cancel' className='btn' >
+                <span>Cancelar</span>
             </button>
 
 

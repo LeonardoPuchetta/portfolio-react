@@ -279,9 +279,98 @@ api.get('/get-image/:name',FileProjectController.getImage);
 
 - **(3)** En el api del client : 
 
+--------------------------------------------------------------
+
+## **Descargar archivos desde el server**
+
+- Tenemos el metodo en el controlador fileProject getFile() :
+
+~~~
+function getFile(request,response){
+
+    const {name} = request.params;
+    
+    const filePath = "./../uploads/project-files/" + name ; 
+
+    //generamos una ruta absoluta 
+    const pathFile = path.join(__dirname,filePath);
 
 
+    //comprobamos si la imagen existe y en caso que podamos leeerla la retornamos 
+    if(fs.existsSync(pathFile)){
+        fs.readFile(pathFile,(err,data)=>{
+            if(err){
+                console.log(err)
+            } else {
+                response.sendFile(path.resolve(pathFile))
+            }
+        })
+    } else {
+        response.status(404).send({message:"Archivo no encontrado"});
+    }
+}
+~~~
 
+- Podemos configurar getFileApi en el cliente para recibir un blob() como respuesta a la peticion :
+
+~~~
+export function  getFileApi(name){
+
+    const url = `${basePath}/${apiVersion}/get-file/${name}`;
+
+    const params ={
+        method: 'GET',
+        headers: {
+            "Content-type":"application/json" 
+        }
+    };
+
+        return fetch(url,params)
+        .then(response => {
+            return response.blob()
+        }).then(result => {
+            return result
+        }).catch(error =>{
+            return error.message
+        })
+
+}
+~~~
+
+<a href='https://www.youtube.com/watch?v=io2blfAlO6E'>https://www.youtube.com/watch?v=io2blfAlO6E</a>
+
+- Realizamos la descarga en el componente FileCard meadiante de funcion handleClick() asociada a un button :
+
+~~~
+const handleClick = () => {
+
+    //solicitamos el archivo en formato blob desde el server
+    getFileApi(fileName).then( response => {
+
+    //creacion de la objectURL mediante el blob    
+    const href = URL.createObjectURL(response);
+    
+    //creacion del anchior y seteo de propiedades
+    const a = Object.assign(document.createElement('a'),{
+        href,
+        style: "display:none",
+        download: `${fileName}`
+    })
+
+    //agregamos el elemento al body
+    document.body.appendChild(a);
+
+    //generamos un evento en el anchor creado
+    a.click();
+    //limpiamos la URL del navegador una vez echa la descarga
+    URL.revokeObjectURL(href);
+    //removemos la etiqueta creada
+    a.remove();
+
+    })
+
+  };
+~~~
 
 
 

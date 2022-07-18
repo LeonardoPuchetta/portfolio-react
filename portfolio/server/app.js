@@ -1,6 +1,8 @@
 // traemos express 
 const express = require('express');
 
+//const bodyParser = require('body-parser');
+
 const app = express() ;
 const {API_VERSION} = require('./config');
 
@@ -15,6 +17,8 @@ const authRoutes = require('./routes/auth');
 
 //para poder tomar datos del body de la peticion
 app.use(express.json());
+// app.use(bodyParser.urlencoded({extended : true}));
+// app.use(bodyParser.json());
 
 //Configure Header HTTP
 app.use((req, res, next) => {
