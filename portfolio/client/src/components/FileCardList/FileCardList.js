@@ -10,7 +10,8 @@ export default function FileCardList(props) {
 
 
   return (
-    <div>
+    <div className='filecard-list'>
+      
         {
         files.map((file,index) => {
             return (

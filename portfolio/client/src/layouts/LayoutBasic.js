@@ -13,16 +13,15 @@ export default function LayoutBasic(props) {
 
   return (
      <>
-    
-        <Header/>
-    
-        <div className='content'>
-          
-          {children}
-        
+        <div className='header-layout'>
+          <Header />
         </div>
-
-        <Footer className='footer-layout' />
+        <div className='content-layout'> 
+          {children}
+        </div>
+        <div className='footer-layout'>
+          <Footer  />
+        </div>
 
     </> 
   )

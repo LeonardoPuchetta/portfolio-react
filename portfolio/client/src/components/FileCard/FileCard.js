@@ -43,12 +43,14 @@ const handleClick = () => {
   };
    
   return (
-    <div>
+    <div className='file-div'>
         
-            <img src={imgPath(`./markdown.svg`)} alt='file' title={fileAlt} type="img/svg"></img>
-            <button onClick={handleClick}>
-                Descargar
-            </button>
+            <img src={imgPath(`./markdown.svg`)} alt='file' title={fileAlt} type="img/svg" className='file-image'></img>
+            {/* <button onClick={handleClick}>
+                {fileAlt}
+            </button> */}
+            <a href='#' onClick={handleClick} className='file-link'>{fileAlt}</a>
+
         
     </div>
   )

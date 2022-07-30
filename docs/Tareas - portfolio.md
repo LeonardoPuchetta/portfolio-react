@@ -29,14 +29,18 @@
 |Creacion de middleware para proteger endpoints con login|------------------|**listo**|
 |Formulario de update para proyectos ya existentes|------------------|**listo**|
 |Funcionalidad de modificacion de proyectos|Update|**listo**|
-|Funcionalidad de borrado de proyectos|Delete|pendiente|
-|Validar formulario de nuevos proyectos|------------------|pendiente|
-|Pagina de Inicio|------------------|pendiente|
-||------------------||
-|Personalizar elementos de notificacion mediante hooks|https://coder-solution-es.com/solution-es-blog/1164768|pendiente|
+|Funcionalidad de borrado de proyectos|Delete|**listo**|
+|Validar formulario de nuevos proyectos|------------------|**listo**|
+|**Apartado visual y algunas funcionalidades** |
+|Pagina de Inicio|------------------|**listo**|
+|Header|Agregar links a los iconos |**listo**|
+|Solucionar aparicion de icon Login en header de inicio|------------------|pendiente|
+|CSS de componentes de Proyecto|------------------|pendiente|
+|CSS de formularios|------------------|pendiente|
+|Personalizar elementos de notificacion mediante hooks para acciones de administrador |https://coder-solution-es.com/solution-es-blog/1164768|pendiente|
 |Colores y fuentes |CSS|pendiente|
 |CSS de formularios|------------------|pendiente|
-|Hacer font-size responsive|------------------|pendiente|
+|Hacer elementos responsive|------------------|pendiente|
 |Dark-mode button en el header|------------------|pendiente|
 
 ### Creacion de la estructura del cliente
@@ -721,7 +725,95 @@ export function updateProjectApi(projectData,projectId,token){
 
 - Esta funcion realiza el update del proyecto mediante updateProjectApi y cierra el modal , faltaria deplegar un aviso de "Proyecto ${name} modificado "
 
+### Funcionalidad de borrado de proyectos (**DELETE**)
 
+
+- En el server creamos deleteProject para realizar el borrado en la base  .En el controlador de proyectos : 
+
+~~~
+//funcion para borrar proyectos 
+ function deleteProject(request,response){
+
+    //recibimos el id por los params 
+    const params = request.params
+
+    Project.findByIdAndRemove({_id:params.id},(error,projectDeleted)=>{
+
+        if (error) {
+            response.status(500).send({message:'Error en el servidor'})
+        } else {
+            if (!projectDeleted){
+                response.status(404).send({message: 'Proyecto no encontrado'})
+            } else {
+                response.status(200).send({message:'Proyecto borrado correctamente'})
+            }
+        }
+
+    })
+ }
+~~~
+- En las routes del server (routes/project.js): 
+
+~~~
+api.delete('/delete-project/:id',[md_auth.ensureAuth],ProjectController.deleteProject);
+~~~
+
+- En el cliente creamos deleteProjectApi :
+
+~~~
+export function deleteProjectApi(projectId,token){
+
+    const url = `${basePath}/${apiVersion}/delete-project/${projectId}`
+
+    const params = {
+        method :'DELETE',
+        headers : {
+            "Content-type":"application/json",
+            "Authorization": token
+        }
+    }
+
+         // retornamos un fetch() o sea una peticion asincrona
+         return fetch (url ,params)
+         .then (response => {
+             return response.json()
+         })
+         .then (result => {
+             return result ; 
+         })  // por si tiene error , devuelve el mensaje de error del endpoint 
+         .catch(err=> {
+             return err.message
+         }   
+             )
+}
+~~~
+
+- Y utilizamos esta funcionalidad en el componente de Proyecto :
+
+~~~
+  const deleteProject = () => {
+    const token = getAccessTokenApi();
+    deleteProjectApi(id,token);
+  }
+~~~
+
+## Apartado visual y algunas funcionalidades 
+
+### Header 
+
+- Trabajamos en el header agregando links para linkedin, github y otro para realizar el login o el deslogueo del administrador 
+
+- Unidades em y rem 
+
+- 
+
+
+
+- problemas con localhost message :
+
+- crbug/1173575, non-JS module files deprecated.
+
+- To Solve VM305:5551 crbug/1173575, non-JS module files deprecated Error Just delete the launch.json file and it worked for me
 
 
 

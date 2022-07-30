@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import UpdateProjectForm from './../components/UpdateProjectFrom';
 import Modal from './../components/Modal';
 
+import './Home.scss'
+
 export default function Home() {
 
 const [projectsList,setProjectsList] = useState([]);
@@ -42,22 +44,27 @@ const toNewProject = () => {
 }
 
   return (
-    <div>
+    <>
+    <div className='home'>
+    <div className='div-projects'>
          {
          arrayProjects?.map((project,index) => {
           return (
+        <div>
           <Proyecto key={index} title={project.title} description = {project.description}
               link={project.link} skills={project.skills} files={project.files} image={project.image} id={project._id}
               isVisibleModal={isVisibleModal} setIsVisibleModal={setIsVisibleModal}
               dataProjectModal={dataProjectModal} setDataProjectModal={setDataProjectModal} />
+        </div>    
           ) })  
     } 
+    </div>
 
-    <div>
+    <div className='new-project-btn'>
       <button onClick={toNewProject}>Nuevo Proyecto</button>
     </div>
 
-    <div>
+    <div className='modal-project'>
           <Modal children={<UpdateProjectForm dataProjectModal={dataProjectModal} 
                             setIsVisibleModal={setIsVisibleModal} isVisibleModal={isVisibleModal}/>} 
             title={dataProjectModal.title}  
@@ -67,7 +74,7 @@ const toNewProject = () => {
     </div>
        
     </div>
-    
+    </>
   )
 }
 

@@ -1,4 +1,22 @@
-img{
-    width: 50px;
-    height: auto;
+@import './../../scss/variables.scss';
+
+.file-div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+}
+
+.file-image{
+    width: 2rem;
+    height: 2rem;
+}
+.file-link{
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: black;
+}
+
+.file-link:hover{
+    color:$background-primary-dark-embers;
 }

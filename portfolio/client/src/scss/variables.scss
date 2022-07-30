@@ -1,7 +1,32 @@
-$base-size : 16;
-$spacing-xxxl : calc(80 / $base-size * 1rem);
+// $base-size : 16;
+// $spacing-xxxl : calc(80 / $base-size * 1rem);
+
+//fuentes 
+$primary-font : monospace;
 
 $background-primary:#9D3ED5;
 $background-header-footer : #6F0AAA;
 $background-area :#FFFE73 ;
+
+
+
+//ashley palette 
+$background-primary-ashley: #E268BB; 
+$background-primary-dark-ashley: #75329B; 
+$background-secundary-ashley:#E9EBEE ;
+$background-secundary-dark-ashley: #FFBA75; 
+
+
+//seaweed palette 
+$background-primary-seaweed: #339476; 
+$background-primary-dark-seaweed: #21605D; 
+$background-secundary-seaweed:#EAEBED ;
+$background-secundary-dark-seaweed: #87E1C7;
+
+//embers palette 
+$background-primary-embers: #974063; 
+$background-primary-dark-embers: #41436A; 
+$background-secundary-embers:#FF9677 ;
+$background-secundary-dark-embers: #F54768;
+
 

@@ -42,29 +42,41 @@ export default function Proyecto(data) {
   return (
       <>
   <div className='project'>
-    <div className='project-title'>
-    <h1 >{title}</h1>
-       {admin ? <button className='update-btn'onClick={getUpdateForm}>Modificar proyecto</button>:<div></div>}
-       {admin ? <button className='delete-btn' onClick={deleteProject}>Borrar proyecto</button>:<div></div>}
-    </div>
-    
-    <div className='project-area'>
-        <div className='project-image'>
-            <ImageCard image={image}/>
+        <div className='project-title'>
+            <div className='div-title'>
+              <h1 >{title}</h1>
+            </div>
+            <div className='div-link'>
+               <a target='_blank' href={link}>{link}</a>
+            </div>
+            <div className='div-btn'>
+                {admin ? <button className='update-btn'onClick={getUpdateForm}>Modificar proyecto</button>:<div></div>}
+                {admin ? <button className='delete-btn' onClick={deleteProject}>Borrar proyecto</button>:<div></div>}
+            </div>
         </div>
+    
+        <div className='project-area'>
 
-          <div className='project-skills'>
-            <SkillsList skills={skills}/>
-          </div>
-            
-          <div className='project-description'>
-            {description}
-          </div>
-         
-          <div className='project-files'>
-            <FileCardList  files={files}/>
-          </div>
-    </div>
+            <div className='project-area-image'>
+                <ImageCard image={image}/>
+            </div>
+
+            <div>
+                  <div className='project-area-description'>
+                    {description}
+                  </div>
+                  <div>
+                    <h4>Lenguajes , frameworks y herramientas utilizados</h4>
+                  </div>
+                  <div className='project-area-skills'>
+                    <SkillsList skills={skills}/>
+                  </div>
+            </div>
+
+            <div className='project-area-files'>
+                  <FileCardList  files={files}/>
+            </div>
+        </div>
   </div>
     </>
   )

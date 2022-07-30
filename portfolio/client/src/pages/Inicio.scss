@@ -1,0 +1,51 @@
+
+@import './../scss/variables.scss';
+
+.content-inicio{
+
+    display:grid;
+    //margin-top: 0.9rem;
+        
+}
+
+
+
+.icon-button-invited{
+    position: relative; 
+}
+
+.invited-text{
+
+    white-space: pre;
+    font-size:1.15rem;
+    font-family: monospace;
+    position: absolute;
+    top: 80%;
+    color: black;
+    
+}
+
+
+// .tooltip-invited{
+//     white-space: pre;
+//     font-size: small;
+//     background-color: $background-secundary-embers;    
+//     color:white;
+//     position: absolute;
+//     border-radius: 5px;
+//     padding:8px;
+//     opacity:0;
+//     visibility:hidden;
+//     bottom: 100%;
+//     font-family: monospace;
+// }
+
+
+.icon-button-invited:hover {
+   
+    color: $background-secundary-dark-embers;
+}
+.icon-button-invited:hover .invited-text {
+    
+    color: $background-secundary-dark-embers;
+}

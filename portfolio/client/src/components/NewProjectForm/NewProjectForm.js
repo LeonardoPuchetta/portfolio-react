@@ -224,9 +224,11 @@ if (cancelBtn){
                     <label id="skill-label" className='label-description'><input type="checkbox" id="html-ckeckbox" value="HTML" name='checkbox'/>HTML</label>
                     <label id="skill-label" className='label-description'><input type="checkbox" id="css-ckeckbox" value="CSS" name='checkbox'/>CSS</label>
                     <label id="skill-label" className='label-description'><input type="checkbox" id="javascript-ckeckbox" value="Javascript"name='checkbox'/>Javascript</label>
-                    <label id="skill-label" className='label-description'><input type="checkbox" id="javascript-ckeckbox" value="NodeJS"name='checkbox'/>NodeJS</label>
+                    <label id="skill-label" className='label-description'><input type="checkbox" id="nodejs-ckeckbox" value="NodeJS"name='checkbox'/>NodeJS</label>
                     <label id="skill-label" className='label-description'><input type="checkbox" id="github-ckeckbox" value="Github"name='checkbox'/>Github</label>
-
+                    <label id="skill-label" className='label-description'><input type="checkbox" id="yarn-ckeckbox" value="Yarn"name='checkbox'/>Yarn</label>
+                    <label id="skill-label" className='label-description'><input type="checkbox" id="react-ckeckbox" value="React"name='checkbox'/>React</label>
+                    <label id="skill-label" className='label-description'><input type="checkbox" id="sass-ckeckbox" value="Sass"name='checkbox'/>Sass</label>
             </div>
 
             <div className='upload-images'>

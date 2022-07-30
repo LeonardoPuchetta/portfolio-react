@@ -1,29 +1,64 @@
 @import './../../scss/variables.scss';
 
 
-.header{
-    
-    
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 50px;
-    width: 100%;
-    position: fixed;
-    top:0;
-    align-items: center;
-    background-color: $background-header-footer;
-    
-    
-
-    &-right{
+.header-right{
         display: flex;
         flex-direction: row;
+        margin: 1.5rem
     }
-    &-left{
+    
+.header-left{
         display: flex;
         flex-direction: row;
+        margin:0.5rem
     }
 
+
+.icon-button{
+ position: relative;
+
+
+}
+.tooltip{
+    white-space: pre;
+    font-size: small;
+    background-color: $background-secundary-embers;    
+    color:white;
+    position: absolute;
+    border-radius: 0.4rem;
+    padding:0.5rem;
+    left:50%;
+    top : 140%;
+    opacity:0;
+    visibility:hidden;
+}
+.tooltip-login{
+    white-space: pre;
+    font-size: small;
+    background-color: $background-secundary-embers;    
+    color:white;
+    position: absolute;
+    border-radius: 0.4rem;
+    padding:0.5rem;
+    right:50%;
+    top : 140%;
+    opacity:0;
+    visibility:hidden;
+    font-family: monospace;
+}
+
+.icon-button:hover .tooltip{
+    visibility: visible;
+    opacity: 1;
+    transition: 1.5s;
+}
+.icon-button:hover .tooltip-login{
+    visibility: visible;
+    opacity: 1;
+    transition: 1.5s;
+}
+
+.icon-button:hover {
+    color: $background-secundary-embers;
 }
 

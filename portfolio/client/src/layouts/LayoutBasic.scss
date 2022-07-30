@@ -1,23 +1,59 @@
 
 @import './../scss/variables.scss';
 
+.header-layout {
 
-.content{
-    
     display: flex;
-    flex-direction: column;
-    align-items:center;
-    
-    padding: 40px 70px 0px 70px;
-    background-color: $background-primary;
-
-    min-height: 100vh;
-
+    flex-direction: row;
+    justify-content: space-between;
+    height: 3.8rem;
+    min-width: 100vw;
+    width: 100%;
+    position: fixed;
+    top:0;
+    align-items: center;
+    background-color: $background-primary-dark-embers;  
+    font-family: monospace;
    
 }
 
+.content-layout{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center ; 
+    background-color:$background-primary-embers;
+    margin:0;
+    //min-width: fit-content;
+    min-width: 100vw;
+    width: 100%;
+    min-height: calc(100vh - 3.8rem);
+    
+    
+    
+}
+
 .footer-layout{
-  
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 3.8rem;
+    //min-width: 100vw;
+    width: 100vw;
+
+    
+    background-color: $background-primary-dark-embers;  
+    font-family: monospace;  
+ 
+    position: relative;
+    bottom: 0;
+    //margin-top: auto;
+    //box-sizing: border-box;
+    //overflow: hidden;
 }
 
 

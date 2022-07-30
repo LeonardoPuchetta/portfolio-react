@@ -1,5 +1,56 @@
-img{
-    width: 30px;
-    height: auto;
+@import './../../scss/variables.scss';
+
+
+.skill{
+
+    text-align: center;
+    margin:0.5rem;
+
+    &-image{
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.2rem;
+
+        &-description{
+            font-weight:bold ;
+            margin-top: 0;
+            font-size: small;
+        }
+    }
+
+
+    
+}
+
+
+.tooltip-skill {
+
+    white-space: pre;
+    font-size: small;
+    background-color: $background-primary-dark-embers;    
+    color:white;
+    border-radius: 0.4rem;
+    padding:0.2rem;
+
+    top:50%;
+    right:50%;
+
+    opacity:0;
+    visibility:hidden;
+    position:inherit;
+ 
+    
 
 }
+
+.skill-image:host .tooltip-skill {
+
+    visibility: visible;
+    opacity: 1;
+    transition: 1.5s;
+    
+} 
+
+    
+
+

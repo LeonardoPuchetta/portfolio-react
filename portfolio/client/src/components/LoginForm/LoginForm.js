@@ -1,6 +1,7 @@
 import React , {useState} from 'react';
 import { ACCESS_TOKEN,REFRESH_TOKEN } from '../../utils/constants';
 import { signInApi } from '../../api/user';
+import './LoginForm.scss';
 
 export default function LoginForm() {
 
@@ -41,13 +42,13 @@ export default function LoginForm() {
 
     }    
     
-    const redirectToHome = () => {
-        window.location.href = "/Home";
-    }
+ 
 
 
   return (
     <>
+    <div className='form-div'>
+  
     <form className='login-form' name='loginForm'  onSubmit={login}>
         <label id='name-label' className='label-description' htmlFor='name'>
             <span>Usuario</span></label>
@@ -65,10 +66,8 @@ export default function LoginForm() {
 
     </form>
 
-    <button type='submit'  className='btn-invited' onClick={redirectToHome}>
-        <span>Entrar como invitado</span>
-    </button>
-
+   
+    </div>
   </>  
   )
 }
